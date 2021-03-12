@@ -141,7 +141,7 @@ static const char AT_CMD_WRITE_ENABLE_SLEEP[] = "AT+QSCLK=1\r\n";
 static const char AT_CMD_WRITE_QBAND[] = "AT+QBAND=" QBAND "\r\n";
 static const char AT_CMD_WRITE_SCRAMBLE[] = "AT+QSPCHSC=1\r\n";
 
-static const char REQUEST_TEMPLATE[] = "POST /API/data?id=%s&t=%.1f&y=%.1f&u=%.1f&v=%d&s=%d HTTP/1.0\r\nHost: example.org\r\n\r\n"; // service uri for HTTP header
+static const char REQUEST_TEMPLATE[] = "POST /API/data?id=%s&t=%.1f&y=%.1f&u=%.1f&v=%d&s=%d HTTP/1.0\r\nHost: example.org\r\n\r\n"; // service uri for HTTP header. Parameters are: id=CIMI; t,y and u = temperatures from the three sensors; v = voltage; and s = signal strength (RSSI)
 static const char SENDEX_TEMPLATE[] =  "AT+QISENDEX=0,%d,";
 
 /* forward declarations */

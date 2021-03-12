@@ -7,11 +7,13 @@ Contents of this repository
 ---------------------------
 
 DS18x20-uart-opencpu
- - DS18x20 onewire over uart implementation for Quectel bc66/OpenCPU.
+ - DS18x20 1-wire over uart implementation for Quectel bc66/OpenCPU.
 
 
 NB-IoT-Temperature-Prototype
 - NB-IoT-based temperature sensor prototype running on Quectel bc66/OpenCPU.
+- Can be used to send CIMI, temperatures measurements, voltage and signal strength to a remote server using HTTP
+- Uses DS18x20-uart-opencpu 1-wire protocol implementation for sensor communications
 
 License
 -------

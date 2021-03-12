@@ -1,6 +1,10 @@
 # NB-IoT-Temperature-Prototype
 NB-IoT-Temperature-Prototype based on Olimex dev kit for Quectel bc66
 
+- NB-IoT-based temperature sensor prototype running on Quectel bc66/OpenCPU.
+- Can be used to send CIMI, temperatures measurements, voltage and signal strength to a remote server using HTTP
+- Uses [DS18x20-uart-opencpu](https://github.com/otula/kiemi/tree/master/DS18x20-uart-opencpu) 1-wire protocol implementation for sensor communications
+
 Before use, remember to modify the appropriate #defines and constants to match your environment. Namely APN_OPERATOR, SERVER_ADDRESS, SERVER_PORT and REQUEST_TEMPLATE.
 
 The code should work "as is", though certain limitations do remain. You can check the TODOs in the source code for improvement ideas and/or unimplemented features.
