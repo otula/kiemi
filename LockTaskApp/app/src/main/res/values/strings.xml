@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LockTaskApp</string>
+    <string name="device_admin_name">LockTaskAppAdmin</string>
+    <string name="device_admin_description">LockTaskAppAdminDescription</string>
+</resources>

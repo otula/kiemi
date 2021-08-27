@@ -1,0 +1,281 @@
+#
+# Copyright 2021 Tampere University
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+openapi: 3.0.0
+info:
+  description: LoraWAN Web
+  version: 1.0.0
+  title: LoraWAN Web API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: data
+    description: Manage data captured by the gateway
+  - name: sensors
+    description: Manage nodes known by this gateway
+paths:
+###################### DATA API --> ###################################
+  "/data":
+    get:
+      tags:
+        - data
+      security:
+        - BasicAuth: []
+      summary: Return an array of data
+      description: Returns data based on the given parameters
+      operationId: getData
+      parameters:
+        - name: data_id
+          in: query
+          description: Return data, which have the given data id(s)
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: from
+          in: query
+          description: RFC3339 start date (inclusive) for the data to retrieve
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          description: RFC3339 end date  (inclusive) for the data to retrieve
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: node_id
+          in: query
+          description: Return data produced by specific node(s)
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Data"
+    delete:
+      tags:
+        - data
+      security:
+        - BasicAuth: []
+      summary: Delete data
+      description: Delete existing data
+      operationId: deleteData
+      parameters:
+        - name: data_id
+          in: query
+          description: Delete data, which have the given data id(s)
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: from
+          in: query
+          description: RFC3339 start date (inclusive) for the data to delete
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          description: RFC3339 end date  (inclusive) for the data to delete
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: node_id
+          in: query
+          description: Delete data produced by specific node(s)
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: int64
+      responses:
+        "200":
+          description: The data was deleted OK
+        "400":
+          description: Malformed parameter(s) given
+        "404":
+          description: Data was not found or permission was denied
+###################### <-- DATA API ###################################
+###################### NODES API --> ###################################
+  "/nodes":
+    get:
+      tags:
+        - nodes
+      security:
+        - BasicAuth: []
+      summary: Return an array of nodes
+      description: Returns nodes based on the given parameters
+      operationId: getNodes
+      parameters:
+        - name: node_id
+          in: query
+          description: Return nodes matching the given node id
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Node"
+    post:
+      tags:
+        - nodes
+      security:
+        - BasicAuth: []
+      summary: Add a new node
+      description: Add a new node
+      operationId: postNode
+      requestBody:
+        description: The node to add as an HTTP body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Node"
+      responses:
+        "201":
+          description: On success, returns a node object with the generated ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Node"
+        "400":
+          description: Invalid Node submitted
+    delete:
+      tags:
+        - nodes
+      security:
+        - BasicAuth: []
+      summary: Delete node(s)
+      description: Delete existing node(s) and all data produced by the node(s)
+      operationId: deleteNodes
+      parameters:
+        - name: node_id
+          in: query
+          description: Delete node(s) matching the give id(s)
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        "200":
+          description: The node was deleted OK
+        "400":
+          description: Malformed parameter(s) given
+        "404":
+          description: Data was not found or permission was denied
+###################### <-- NODES API ###################################
+servers:
+  - url: http://localhost/lorawan
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Data:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        timestamp:
+          type: string
+          format: date-time
+          description: Creation timestamp (RFC3339)
+        eco2:
+          type: integer
+          format: int64
+          description: eCO2 in ppm
+        humidity:
+          type: number
+          format: double
+          description: relative humidity %
+        pressure:
+          type: number
+          format: double
+          description: pressure in hPa
+        temperature:
+          type: number
+          format: double
+          description: temperature in C
+        tvoc:
+          type: integer
+          format: int64
+          description: TVOC in ppb
+      required:
+        - id
+        - timestamp
+    Node:
+      type: object
+      properties:
+        appkey:
+          type: string
+          description: 16 hex (32 characters) appkey, e.g. 00000000000000000000000000000000
+        appskey:
+          type: string
+          description: 16 hex (32 characters) appskey, e.g. 00000000000000000000000000000000
+        description:
+          type: string
+          description: optional description for this node
+        id:
+          type: string
+          format: uuid
+          description: UUID for this node
+        nwkskey:
+          type: string
+          description: 16 hex (32 characters) nwkskey, e.g. 00000000000000000000000000000000
+      required:
+        - nwkskey
+        - appskey
+        - appkey

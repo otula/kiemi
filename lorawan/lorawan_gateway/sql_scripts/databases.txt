@@ -1,0 +1,42 @@
+########################################################################
+#
+# Copyright 2019 Tampere University
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#  http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+########################################################################
+
+===============================================================================
+sensor_nodes
+------------
+node_id			VARCHAR (40 characters, primaryKey)
+description		VARCHAR (1024 characters, NULL OK)
+nwkskey			VARCHAR (32 characters)
+appskey			VARCHAR (32 characters)
+appkey			VARCHAR (32 characters)
+row_updated		TIMESTAMP (CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)
+row_created		TIMESTAMP ('0000-00-00 00:00:00')
+
+sensor_data
+-----------
+data_id			INT (primaryKey, autoincrement)
+node_id			VARCHAR (40 characters, index)
+eco2			BIGINT (NULL OK)
+humidity		DECIMAL (NULL OK)
+pressure		DECIMAL (NULL OK)
+temperature		DECIMAL (NULL OK)
+tvoc			BIGINT (NULL OK)
+timestamp		BIGINT (in unix time, milliseconds since Epoch)
+row_updated		TIMESTAMP (CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)
+row_created		TIMESTAMP ('0000-00-00 00:00:00')
+

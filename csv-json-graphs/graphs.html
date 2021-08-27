@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2019 Tampere University
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/graphs.css">
+		<link rel="stylesheet" type="text/css" href="css/color.css">
+		<title>Graphs</title>
+		<script src="js/lib/jquery-3.6.0.min.js"></script> <!-- https://jquery.com -->
+		<script src="js/lib/flotcharts/jquery.colorhelpers.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.canvaswrapper.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.saturated.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.browser.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.drawSeries.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.uiConstants.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.navigate.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.touchNavigate.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.hover.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.touch.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.time.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.axislabels.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/lib/flotcharts/jquery.flot.selection.js"></script> <!-- http://www.flotcharts.org/ -->
+		<script src="js/core.js"></script>
+		<script src="js/timeutils.js"></script>
+		<script src="js/csv-files.js"></script>
+		<script src="js/json-files.js"></script>
+		<script src="js/color.js"></script>
+		<script src="js/graphs.js"></script>
+		<script src="js/statistics.js"></script>
+		<script src="js/uri-initializer.js"></script>
+	</head>
+	<body onload="core.initialize()">
+		<div id="main-container">
+			<div id="controls">
+				<input id="input-csv-separator" type="text" maxlength="1" value="," placeholder="csv-erotinmerkki">
+				<div id="csv-file-upload" class="file-upload-box">
+					<input id="input-csv-file-upload" type="file" style="position: fixed; top: -100em" onchange="xycsvFiles.readFiles(this.files)">
+					<label for="input-csv-file-upload">Pudota .csv tiedosto tähän</label>
+				</div>
+				<div id="json-file-upload" class="file-upload-box">
+					<input id="input-json-file-upload" type="file" style="position: fixed; top: -100em" onchange="xyjsonFiles.readFiles(this.files)">
+					<label for="input-json-file-upload">Pudota .json tiedosto tähän</label>
+				</div>
+				<input id="input-timestamp-field" type="text" value="timestamp" placeholder="aikaleimakentän nimi">
+				<input type="checkbox" id="input-only-combined-selector">Piirrä vain yhdistetyt kuvaajat
+				<input id="input-time-window" type="number" min="1" value="10000" placeholder="yhdistetyn kuvaajan aikaikkuna (+/-ms)">
+				<input id="input-limits" type="text" placeholder="limits in format: name,field_name,value,#html_color,TYPE[min/max], e.g. min temperature,temperature,20,#0000ff,min;max temperature,temperature,24,#ff0000,max">
+				<input id="input-filters" type="text" placeholder="fields not to include in graphs, separated by comma">
+				<button onclick="graphs.clearGraphs()">Tyhjennä</button>
+				<div id="color-bar">
+					<div id="color-file-upload" class="file-upload-box">
+						<input id="input-color-file-upload" type="file" style="position: fixed; top: -100em" onchange="colors.readFile(this.files[0])">
+						<label for="input-color-file-upload">Pudota väritiedosto tähän</label>
+					</div>
+					<div id="color-bar-color-list">
+						<!-- populated dynamically -->
+					</div>
+				</div>
+			</div>
+			<div id="limit-container"><!-- Populated dynamically --></div>
+			<div id="graph-container"><!-- Populated dynamically --></div>
+			<div id="graph-tooltip"><!-- Populated dynamically --></div>
+		</div>
+		<div id="input-controls">
+			<input type="button" value="Piiloita/näytä asetukset" onclick="graphs.toggleDivs('limit-container,controls')">
+		</div>
+	</body>
+</html>

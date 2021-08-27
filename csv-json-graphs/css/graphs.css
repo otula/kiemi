@@ -1,0 +1,254 @@
+/**
+ * Copyright 2019 Tampere University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/************ MAIN ******************/
+html, body {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+/**
+ * container for controls
+ */
+#controls {
+	height : 8%;
+	width: 100%;
+	z-index: 110;
+	position: fixed;
+	top: 0px;
+}
+
+/************ GRAPHS ******************/
+
+/**
+ * container for graphs
+ */
+#graph-container {
+	height: 92%;
+	width: 100%;
+	margin-top: 8%;
+	position: relative;
+}
+
+/**
+ * container for limit statistics
+ */
+#limit-container {
+	top: 8%;
+	position: relative;
+	border: 1px solid;
+}
+
+/**
+ * container for chart elements in graph-container
+ */
+.chart-container {
+	/* nothing needed */
+}
+
+/**
+ * container for a single chart in chart-container
+ */
+.chart-graph {
+	width: 100%;
+	height: 400px;
+}
+
+/**
+ * chart label
+ */
+.chart-label {
+	text-align: center;
+}
+
+/**
+ * limit item in limits list
+ */
+.limit-item {
+	padding: 2px;
+}
+
+/**
+ * file upload drop-box
+ */
+#graph-tooltip {
+	position: absolute;
+	display: none;
+	border: 1px solid #fdd;
+	padding: 2px;
+	background-color: #fee;
+	opacity: 0.80
+}
+
+/**
+ * legend limit container
+ */
+.limit-legend-container {
+	border: 2px solid;
+	padding: 10px;
+}
+
+/**
+ * legend container
+ */
+.legend-container {
+	border: 2px solid;
+	padding: 5px;
+}
+
+/**
+ * legend
+ */
+.legend {
+	border: 2px dashed;
+	padding: 5px;
+	width: 90%;
+	overflow: hidden;
+}
+
+/**
+ * legend item (label)
+ */
+.legend-item {
+	text-align: center;
+	float: left;
+	padding: 2px;
+}
+
+/**
+ * label for the legend (dataset label)
+ */
+.legend-label {
+	/* nothing needed */
+}
+
+/**
+ * legend item value
+ */
+.legend-value {
+	/* nothing needed */
+}
+
+/**
+ * legend item selected value
+ */
+.legend-value-selected {
+	font-weight: bold;
+	font-size: x-large;
+}
+
+/**
+ * legend
+ */
+.statistics {
+	border: 2px solid;
+	padding: 5px;
+	width: 90%;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+/**
+ * legend item (label)
+ */
+.statistics-item {
+	text-align: center;
+	float: left;
+	width: 30%;
+}
+
+
+/**
+ * legend item selector
+ */
+.legend-item-selector {
+	/* nothing needed */
+}
+
+/**
+ * zoom-out button
+ */
+.zoom-out {
+	/* nothing needed */
+}
+
+/************ FILE UPLOAD ******************/
+
+/**
+ * hover effect for file drop box
+ */
+.hover {
+ 	border: 2px dashed;
+ 	border-color: yellow;
+ }
+
+/**
+ * normalized chart container
+ */
+#chart-normalized-container {
+	margin-top: 20px;
+	border: 2px dotted;
+}
+
+/**
+ * combined chart container
+ */
+#chart-combined-container {
+	margin-top: 20px;
+	border: 2px dotted;
+}
+
+/**
+ * log chart container
+ */
+#chart-log-container {
+	margin-top: 20px;
+	border: 2px dotted;
+}
+
+/**
+ * file upload drop-box
+ */
+.file-upload-box {
+	width: 30%;
+	background-color: #ff0000;
+	float: left;
+	border-style: solid;
+  border-color: cyan;
+}
+
+/**
+ * input for csv separator
+ */
+#input-csv-separator {
+	width: 10%;
+	float: left;
+}
+
+/**
+ * input control container
+ */
+#input-controls{
+	margin-top: 10%;
+}
+
+/**
+ * hidden element
+ */
+.hidden {
+	display:none;
+}

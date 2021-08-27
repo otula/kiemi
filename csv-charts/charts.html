@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2020 Tampere University
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/charts.css">
+		<title>Charts</title>
+		<script src="js/lib/chartjs/Chart.min.js"></script> <!-- https://www.chartjs.org/ -->
+		<script src="js/csv-files.js"></script>
+		<script src="js/charts.js"></script>
+		<script src="js/statistics.js"></script>
+		<script src="js/core.js"></script>
+	</head>
+	<body onload="core.initialize()">
+		<div id="controls">
+			<div id="csv-file-upload"><label for="csv-file-upload-input">Pudota .csv tiedosto tähän</label></div>
+			<input id="csv-file-upload-input" type="file" style="position: fixed; top: -100em" onchange="csvFiles.readFiles(this.files)">
+			<label for="csv-file-chart-type">Type: </label>
+			<input type="radio" name="csv-file-chart-type" value="pie" checked="checked">Pie</input>
+			<input type="radio" name="csv-file-chart-type" value="bar">Bar</input>
+			<button onclick="charts.clearCharts()">Tyhjennä</button>
+		</div>
+		<div id="chart-container"><!-- Populated dynamically --></div>
+	</body>
+</html>

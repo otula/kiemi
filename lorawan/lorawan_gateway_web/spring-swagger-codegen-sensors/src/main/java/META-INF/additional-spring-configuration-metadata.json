@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "tuni.lorawan.sensors.username",
+    "type": "java.lang.String",
+    "description": "LoraWAN gateway username"
+  },
+  {
+    "name": "tuni.lorawan.sensors.password",
+    "type": "java.lang.String",
+    "description": "LoraWAN gateway password"
+  }
+]}

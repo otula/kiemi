@@ -1,0 +1,9 @@
+lorawan_gateway
+- Gateway for listening LoraWAN messages and storing them into a MySQL database.
+
+lorawan_gateway_web
+- REST API service for retrieving the captured messages from the MySQL database.
+
+sodaq
+- Test codes for Arduino/Sodaq
+- sodaq/sodaq_lora.ino contains the main code for reading BME680 and SGP30 sensors and sending the values using LoraWAN.
