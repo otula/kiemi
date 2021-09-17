@@ -42,6 +42,7 @@ import android.webkit.WebViewClient;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 
 /**
  * Based on: http://wenchaojiang.github.io/blog/realise-Android-kiosk-mode/
@@ -49,9 +50,13 @@ import java.time.temporal.ChronoUnit;
  * Usage:
  * 	- install apk
  * 	- open adb shell, execute dpm set-device-owner com.otula.locktaskapp/.DeviceAdmin
- *
+ * 	 *
  *  WARNING: DEPENDING ON YOUR DEVICE, IT MIGHT BE _EXTREMELY_ DIFFICULT TO EXIT THE APPLICATION,
  *  AND YOU MIGHT BE REQUIRED TO RE-DEPLOY THE APPLICATION WITHOUT android.intent.category.HOME and android.intent.category.DEFAULT INTENT-FILTERS
+ *
+ *  NOTE: on some devices, uninstalling the application without first removing the admin permissions might be impossible.
+ *  The admin can be removed from adb shell by executing the command dpm remove-active-admin com.otula.locktaskapp/.DeviceAdmin
+ *  After this you should be able to uninstall the application normally or by using adb shell command (adb uninstall com.otula.locktaskapp or pm uninstall --user 0 com.otula.locktaskapp)
  */
 public class MainActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener {
 	private static final String TAG = MainActivity.class.toString();
@@ -129,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements View.OnSystemUiVi
 
 			@Override
 			public void onPageStarted(WebView view, String url, Bitmap favicon) {
+				Log.d(TAG, "Injecting username "+USERNAME+" and password "+PASSWORD_HIDDEN);
 				/* inject data to HTML5 SessionStorage, in this, username and password, we could also run other arbitrary JavaScript code after the page has finished loading if needed */
 				view.evaluateJavascript("sessionStorage.setItem(\'"+SESSIONSTORAGE_USERNAME+"\', \'"+USERNAME+"\')", null); // set credentials to override login page
 				view.evaluateJavascript("sessionStorage.setItem(\'"+SESSIONSTORAGE_PASSWORD+"\', \'"+PASSWORD+"\')", null); // set credentials to override login page

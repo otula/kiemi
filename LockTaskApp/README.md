@@ -11,3 +11,7 @@ The default implementation also injects username and password to HTML5 SessionSt
 The application will also automatically reload the web page during nighttime (when users are presumably not using the device). You can disable this functionality in the onResume() method.
 
 If you need to allow unencrypted cleartext communication, this can be enabled in res/xml/network_security_config.xml.
+
+WARNING: DEPENDING ON YOUR DEVICE, IT MIGHT BE _EXTREMELY_ DIFFICULT TO EXIT THE APPLICATION, AND YOU MIGHT BE REQUIRED TO RE-DEPLOY THE APPLICATION WITHOUT android.intent.category.HOME and android.intent.category.DEFAULT INTENT-FILTERS
+
+NOTE: on some devices, uninstalling the application without first removing the admin permissions might be impossible. The admin can be removed from adb shell by executing the command dpm remove-active-admin com.otula.locktaskapp/.DeviceAdmin. After this you should be able to uninstall the application normally or by using adb shell command (adb uninstall com.otula.locktaskapp or pm uninstall --user 0 com.otula.locktaskapp)
