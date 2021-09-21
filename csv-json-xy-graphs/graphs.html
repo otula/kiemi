@@ -54,9 +54,10 @@
 					<input id="input-json-file-upload" type="file" style="position: fixed; top: -100em" onchange="xyjsonFiles.readFiles(this.files)">
 					<label for="input-json-file-upload">Pudota .json tiedosto tähän</label>
 				</div>
-				<input id="input-axis-fields" type="text" placeholder="X/Y-akselin kenttien nimet: x1,y1;x2,y2,..." value="temperature,humidity">
+				<input id="input-axis-fields" type="text" placeholder="X/Y-akselin kenttien nimet tiedosto(i)ssa: x1,y1;x2,y2,..." value="temperature,humidity">
 				<input id="input-axis-xy-scale" type="text" placeholder="X/Y-akselin asteikko: Xmin-Xmax/Xstep;Ymin-Ymax/Ystep" value="0-40/5;0-100/10">
 				<input id="input-limits-polygon" type="text" placeholder="polygonikoordinaatit, e.g. [[x1,y1],[x2,y2],[x3,y3]],...#RGBCOL" value="[[17.5,72],[22.1,67],[24.2,33],[19,39]]#006600">
+				<input id="input-axis-labels" type="text" placeholder="X/Y-akselin nimet kuvaajassa: xLabel,yLabel" value="T (°C),RH (%)">
 				<button onclick="xygraphs.clearGraphs()">Tyhjennä</button>
 				<button onclick="xygraphs.setInitialZoom()">Nollaa Zoom</button>
 				<div id="color-bar">

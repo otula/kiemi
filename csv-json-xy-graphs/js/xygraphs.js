@@ -28,6 +28,9 @@ var xygraphs = {
 	legendContainer : null,
 	limitsPolygons : null, // array of {polygon[], color}
 	tooltip : null,
+	inputLimitsPolygon : null,
+	inputAxisXYScale : null,
+	inputAxisLabels : null,
 
 
 	/**
@@ -36,6 +39,9 @@ var xygraphs = {
 	initialize : function(){
 		xygraphs.graphContainer = document.getElementById("xy-graph-container");
 		xygraphs.legendContainer = document.getElementById("xy-legend-container");
+		xygraphs.inputLimitsPolygon = document.getElementById("input-limits-polygon");
+		xygraphs.inputAxisXYScale = document.getElementById("input-axis-xy-scale");
+		xygraphs.inputAxisLabels = document.getElementById("input-axis-labels");
 		xygraphs.tooltip = $("#graph-tooltip");
 	},
 
@@ -43,7 +49,7 @@ var xygraphs = {
 	 *
 	 */
 	setInitialZoom : function() {
-		var scales = document.getElementById("input-axis-xy-scale").value.trim();
+		var scales = xygraphs.inputAxisXYScale.value.trim();
 		if(scales.length < 1){
 			console.log("No initial scale given for x/y.");
 			return;
@@ -107,7 +113,7 @@ var xygraphs = {
 	 *
 	 */
 	parseLimits : function() {
-		var value = document.getElementById("input-limits-polygon").value;
+		var value = xygraphs.inputLimitsPolygon.value;
 		if(value.length > 0){
 			let polygons = value.split(xygraphs.SEPARATOR_POLYGON);
 			xygraphs.limitsPolygons = [];
@@ -266,12 +272,21 @@ var xygraphs = {
 			nData.push(nd);
 		} // for xygraphs.data
 
+		var labelValues = xygraphs.inputAxisLabels.value;
+		var xAxisLabel = xygraphs.data[0].xLabel;
+		var yAxisLabel = xygraphs.data[0].yLabel;
+		if(labelValues.length > 0){
+			let parts = labelValues.split(",");
+			xAxisLabel = parts[0];
+			yAxisLabel = parts[1];
+		}
+
 		var options = {
 			xaxis: {
-				axisLabel : xygraphs.data[0].xLabel
+				axisLabel : xAxisLabel
 			},
 			yaxis: {
-				axisLabel : xygraphs.data[0].yLabel
+				axisLabel : yAxisLabel
 			},
 			selection: {
 				mode: "xy"
