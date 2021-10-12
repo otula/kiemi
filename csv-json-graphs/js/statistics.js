@@ -83,7 +83,10 @@ var statistics = {
 	 * @return {Number} median
 	 */
 	calculateMedian : function(array) {
-		if(array.length % 2 == 0){
+		if(array == null || array.length < 2){
+			console.log("Array size < 2.");
+			return NaN;
+		}else if(array.length % 2 == 0){
 			return (array[array.length/2] + array[array.length/2 - 1])/2;
 		}else{
 			return array[Math.floor(array.length/2)];
@@ -96,6 +99,10 @@ var statistics = {
 	 * @return {Number} standard deviation
 	 */
 	calculateSD : function(array, mean) {
+		if(array == null || array.length < 2){
+			console.log("Array size < 2.");
+			return NaN;
+		}
 		return Math.sqrt(array.map(x => Math.pow(x-mean,2)).reduce((a,b) => a+b)/array.length);
 	}
 };
