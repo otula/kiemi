@@ -91,6 +91,8 @@ var jsonFiles = {
 			return;
 		}
 
+		var filters = document.getElementById("input-filters").value.split(graphs.SEPARATOR_FILTER);
+
 		var timestampField = jsonFiles.jsonTimestampField.value;
 		var data = [];
 		for(let i=0;i<root.length;++i){
@@ -101,7 +103,7 @@ var jsonFiles = {
 				return;
 			}
 			for (let property in obj) { // go through all properties, and generate separate data sets
-				if (obj.hasOwnProperty(property) && property != timestampField) { // skip timestamp
+				if (obj.hasOwnProperty(property) && property != timestampField && !filters.includes(property)) { // skip timestamp and filtered columns
 					let xy = null;
 					for(let j=0;j<data.length;++j){
 						let temp = data[j];
@@ -122,7 +124,8 @@ var jsonFiles = {
 					let value = obj[property];
 					let y = Number(value);
 					if(isNaN(y)){
-						console.log("Ignored invalid value: "+value);
+						alert("Property "+property+" has an invalid value: "+value);
+						return;
 					}else{
 						let point = [x, y];
 						xy.points.push(point);

@@ -97,19 +97,25 @@ var csvFiles = {
 			return;
 		}
 
+		var filters = document.getElementById("input-filters").value.split(graphs.SEPARATOR_FILTER);
+		var filteredColumns = [];
+
 		var values = lines[0].split(separator);
 		var xLabel = csvFiles.csvTimestampColumn.value;
 		var xLabelIndex = -1;
 		var data = [];
 		for(let i=0;i<values.length;++i){
-			if(values[i].localeCompare(xLabel) == 0){
+			let yLabel = values[i];
+			if(yLabel.localeCompare(xLabel) == 0){
 				xLabelIndex = i;
 				continue;
+			}else if(filters.includes(yLabel)){
+				filteredColumns.push(i); // mark this column as filtered, but do not remove the data label (that would cause .csv columns to go out-of-sync)
 			}
 			let xy = new Object();
 			xy.label = label;
 			xy.xLabel = xLabel;
-			xy.yLabel = values[i];
+			xy.yLabel = yLabel;
 			xy.points = [];
 			data.push(xy);
 		}
@@ -142,17 +148,20 @@ var csvFiles = {
 					continue;
 				}
 				let y = values[j];
-				if(y == null){
-					alert("Invalid value: "+values[j]+" on line number "+i+": "+line);
-					return;
-				}
-				y = y.replace(",", ".");
-				if(isNaN(y)){
-					alert("Invalid value: "+values[j]+" on line number "+i+": "+line);
-					return;
+				if(!filteredColumns.includes(j)){ // if this column is filtered, add it as is, otherwise, convert it
+					if(y == null){
+						alert("Invalid value: "+values[j]+" on line number "+i+": "+line);
+						return;
+					}
+					y = y.replace(",", ".");
+					if(isNaN(y)){
+						alert("Invalid value: "+values[j]+" on line number "+i+": "+line);
+						return;
+					}
+					y = Number(y);
 				}
 
-				let point = [x, Number(y)];
+				let point = [x, y];
 				let xy = data[(j >= xLabelIndex ? j-1 : j)];
 				xy.points.push(point);
 			} // for values
