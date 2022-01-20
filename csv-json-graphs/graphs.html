@@ -49,11 +49,11 @@
 			<div id="controls">
 				<input id="input-csv-separator" type="text" maxlength="1" value="," placeholder="csv-erotinmerkki">
 				<div id="csv-file-upload" class="file-upload-box">
-					<input id="input-csv-file-upload" type="file" style="position: fixed; top: -100em" onchange="xycsvFiles.readFiles(this.files)">
+					<input id="input-csv-file-upload" type="file" style="position: fixed; top: -100em" onchange="csvFiles.readFiles(this.files)">
 					<label for="input-csv-file-upload">Pudota .csv tiedosto tähän</label>
 				</div>
 				<div id="json-file-upload" class="file-upload-box">
-					<input id="input-json-file-upload" type="file" style="position: fixed; top: -100em" onchange="xyjsonFiles.readFiles(this.files)">
+					<input id="input-json-file-upload" type="file" style="position: fixed; top: -100em" onchange="jsonFiles.readFiles(this.files)">
 					<label for="input-json-file-upload">Pudota .json tiedosto tähän</label>
 				</div>
 				<input id="input-timestamp-field" type="text" value="timestamp" placeholder="aikaleimakentän nimi">
