@@ -125,3 +125,10 @@ html, body {
 .hidden {
 	display:none;
 }
+
+/**
+ * total point amount container inside legend
+ */
+.xy-legend-total-container {
+	font-weight: bold;
+}

@@ -20,6 +20,9 @@
 var xygraphs = {
 	DECIMAL_FIXED_ROUNDING : 2, // how many decimals to preserve when rounding numbers
 	MAX_META_FIELDS : 10, // maximum number of meta data fields to show in the hover popup
+	DATA_SERIES_INDEX : "seriesIndex",
+	DATA_POINTS_TOTAL : "pointsTotal",
+	DATA_POINTS_OUTSIDE : "pointsOutside",
 	SEPARATOR_POLYGON : ";",
 	SEPARATOR_LIMIT : ",",
 	plot : null,
@@ -31,6 +34,9 @@ var xygraphs = {
 	inputLimitsPolygon : null,
 	inputAxisXYScale : null,
 	inputAxisLabels : null,
+	selectedTotal : 0,
+	selectedOutside : 0,
+	elementSelected : null,
 
 
 	/**
@@ -145,14 +151,24 @@ var xygraphs = {
 	checkLimits : function() {
 		xygraphs.legendContainer.innerHTML = "";
 		if(xygraphs.limitsPolygons == null){
+			xygraphs.elementSelected = null;
 			console.log("No limits.");
 			return;
 		}
+
+		xygraphs.elementSelected = document.createElement("div");
+		xygraphs.elementSelected.className = "xy-legend-total-container";
+		xygraphs.legendContainer.appendChild(xygraphs.elementSelected);
+		xygraphs.selectedTotal = 0;
+		xygraphs.selectedOutside = 0;
+
 		for(let i=0;i<xygraphs.data.length;++i){
 			let data = xygraphs.data[i];
 			let div = document.createElement("div");
 			div.className = "xy-legend-container";
 			div.style.color = data.color;
+			xygraphs.selectedTotal += data.points.length;
+			let totalOutside = 0;
 			let text = data.label+" ("+data.xLabel+"/"+data.yLabel+"), yhteensä: "+data.points.length+", ulkopuolella:";
 			for(let polygon of xygraphs.limitsPolygons){
 				let outside = 0;
@@ -161,19 +177,35 @@ var xygraphs = {
 						++outside;
 					}
 				}
+				totalOutside += outside;
 				text += "<span style='color: "+polygon.color+"'> "+outside+" ("+Math.round((outside/data.points.length)*100)+" %)</span>"
 			}
+			xygraphs.selectedOutside += totalOutside;
 			div.innerHTML = text;
 
 			let checkbox = document.createElement('input');
 			checkbox.type = "checkbox";
 			checkbox.className = "xy-legend-item-selector";
 			checkbox.checked = true;
-			checkbox.series_index = i;
+			let qc = $(checkbox);
+			qc.data(xygraphs.DATA_SERIES_INDEX, i);
+			qc.data(xygraphs.DATA_POINTS_TOTAL, data.points.length);
+			qc.data(xygraphs.DATA_POINTS_OUTSIDE, totalOutside);
 			checkbox.addEventListener("change", function() {
 				let data = xygraphs.plot.getData();
-				data[this.series_index].points.show = this.checked;
+				let t = $(this);
+				data[t.data(xygraphs.DATA_SERIES_INDEX)].points.show = this.checked;
+				let soutside = t.data(xygraphs.DATA_POINTS_OUTSIDE);
+				let stotal = t.data(xygraphs.DATA_POINTS_TOTAL);
+				if(this.checked){
+					xygraphs.selectedOutside += soutside;
+					xygraphs.selectedTotal += stotal;
+				}else{
+					xygraphs.selectedOutside -= soutside;
+					xygraphs.selectedTotal -= stotal;
+				}
 			  xygraphs.plot.draw();
+				xygraphs.updateTotals();
 			});
 			div.appendChild(checkbox);
 			xygraphs.legendContainer.appendChild(div);
@@ -183,24 +215,50 @@ var xygraphs = {
 		button.appendChild(document.createTextNode("Valitse kaikki"));
 		button.addEventListener("click", function() {
 			let data = xygraphs.plot.getData();
+			xygraphs.selectedTotal = 0;
+			xygraphs.selectedOutside = 0;
 			$("#xy-legend-container").find(".xy-legend-item-selector").each(function(){
-				data[this.series_index].points.show = true; // the limits polygon is part of the data, so only change options for indexes included in selectors
+				let t = $(this);
+				data[t.data(xygraphs.DATA_SERIES_INDEX)].points.show = true; // the limits polygon is part of the data, so only change options for indexes included in selectors
 				this.checked = true;
+				xygraphs.selectedOutside += t.data(xygraphs.DATA_POINTS_OUTSIDE);
+				xygraphs.selectedTotal += t.data(xygraphs.DATA_POINTS_TOTAL);
 			});
 			xygraphs.plot.draw();
+			xygraphs.updateTotals();
 		});
 		xygraphs.legendContainer.appendChild(button);
 		button = document.createElement('button');
 		button.appendChild(document.createTextNode("Poista valinnat"));
 		button.addEventListener("click", function() {
 			let data = xygraphs.plot.getData();
+			xygraphs.selectedTotal = 0;
+			xygraphs.selectedOutside = 0;
 			$("#xy-legend-container").find(".xy-legend-item-selector").each(function(){
-				data[this.series_index].points.show = false; // the limits polygon is part of the data, so only change options for indexes included in selectors
+				let t = $(this);
+				data[t.data(xygraphs.DATA_SERIES_INDEX)].points.show = false; // the limits polygon is part of the data, so only change options for indexes included in selectors
 				this.checked = false;
 			});
 			xygraphs.plot.draw();
+			xygraphs.updateTotals();
 		});
 		xygraphs.legendContainer.appendChild(button);
+		xygraphs.updateTotals();
+	},
+
+	/**
+	 *
+	 */
+	updateTotals : function() {
+		let text = "Valittuna: ";
+		if(xygraphs.selectedTotal == 0){
+			text += "0";
+		}else if(xygraphs.selectedOutside == 0){
+			text += xygraphs.selectedTotal + ", ulkopuolella: 0 (0 %)";
+		}else{
+			text += xygraphs.selectedTotal + ", ulkopuolella: "+xygraphs.selectedOutside+" ("+Math.round(xygraphs.selectedOutside/xygraphs.selectedTotal*100)+" %)";
+		}
+		xygraphs.elementSelected.innerHTML = text;
 	},
 
 	/**
@@ -388,9 +446,7 @@ var xygraphs = {
 	 * @param {string} ids list of div ids, separated by comma
 	 */
 	toggleDivs : function(ids) {
-		console.log(ids);
 		var idArray = ids.split(',');
-		console.log(idArray);
 		for(let id of idArray){
 			let element = $(document.getElementById(id));
 			if(element.hasClass("hidden")){
