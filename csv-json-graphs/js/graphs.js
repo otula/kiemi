@@ -38,6 +38,7 @@ var graphs = {
 	normalizedPlot : null,
 	timeWindow : 10000, // in ms, times are checked +/- this amount if the actual time
 	tooltip : null,
+	valueHighlightSelector : null,
 
 
 	/**
@@ -46,6 +47,14 @@ var graphs = {
 	initialize : function(){
 		graphs.graphContainer = document.getElementById("graph-container");
 		graphs.limitContainer = document.getElementById("limit-container");
+		graphs.valueHighlightSelector = document.getElementById("input-highlight-values");
+		graphs.valueHighlightSelector.addEventListener('change', function() {
+		  if (!this.checked) {
+		    graphs.tooltip.hide();
+				graphs.updateCombinedLegend(graphs.combinedLegendValueMap, null, null, null, null);
+				graphs.updateCombinedLegend(graphs.logLegendValueMap, null, null, null, null);
+		  }
+		});
 		graphs.tooltip = $("#graph-tooltip");
 		var selector = document.getElementById("input-only-combined-selector");
 		graphs.drawOnlyCombined = selector.checked;
@@ -246,14 +255,16 @@ var graphs = {
 		var plot = $.plot(div, [xy.points], options);
 
 		div.bind("plothover", function (event, pos, item) {
-			if (item) {
-				let x = item.datapoint[0].toFixed(graphs.DECIMAL_FIXED_ROUNDING);
-				let y = item.datapoint[1].toFixed(graphs.DECIMAL_FIXED_ROUNDING);
-				graphs.tooltip.html((new Date(Number(x))).toISOString() + " / " + y)
-					.css({top: item.pageY+5, left: item.pageX+5})
-					.fadeIn(200);
-			} else {
-				graphs.tooltip.hide();
+			if(graphs.valueHighlightSelector.checked){
+				if (item) {
+					let x = item.datapoint[0].toFixed(graphs.DECIMAL_FIXED_ROUNDING);
+					let y = item.datapoint[1].toFixed(graphs.DECIMAL_FIXED_ROUNDING);
+					graphs.tooltip.html((new Date(Number(x))).toISOString() + " / " + y)
+						.css({top: item.pageY+5, left: item.pageX+5})
+						.fadeIn(200);
+				} else {
+					graphs.tooltip.hide();
+				}
 			}
 		});
 		div.bind("plothovercleanup", function (event, pos, item) {
@@ -438,14 +449,16 @@ var graphs = {
 		graphs.normalizedPlot = $.plot(div, nData, options);
 
 		div.bind("plothover", function (event, pos, item) {
-			if (item) {
-				let x = item.datapoint[0].toFixed(graphs.DECIMAL_FIXED_ROUNDING);
-				let y = ((item.datapoint[1] * (item.series.yMax-item.series.yMin))+item.series.yMin).toFixed(graphs.DECIMAL_FIXED_ROUNDING);
-				graphs.tooltip.html((new Date(Number(x))).toISOString() + " / " + y + " ("+item.series.seriesLabel+"/"+item.series.label+")")
-					.css({top: item.pageY+5, left: item.pageX+5})
-					.fadeIn(200);
-			} else {
-				graphs.tooltip.hide();
+			if(graphs.valueHighlightSelector.checked){
+				if (item) {
+					let x = item.datapoint[0].toFixed(graphs.DECIMAL_FIXED_ROUNDING);
+					let y = ((item.datapoint[1] * (item.series.yMax-item.series.yMin))+item.series.yMin).toFixed(graphs.DECIMAL_FIXED_ROUNDING);
+					graphs.tooltip.html((new Date(Number(x))).toISOString() + " / " + y + " ("+item.series.seriesLabel+"/"+item.series.label+")")
+						.css({top: item.pageY+5, left: item.pageX+5})
+						.fadeIn(200);
+				} else {
+					graphs.tooltip.hide();
+				}
 			}
 		});
 		div.bind("plothovercleanup", function (event, pos, item) {
@@ -508,15 +521,25 @@ var graphs = {
 
 	/**
 	 * @param {Map} legendValueMap
-	 * @param {integer} timestamp
+	 * @param {integer} timestamp if NaN or null, the legend highlight is cleared
 	 * @param {Number} value
 	 * @param {integer} yLabel
 	 * @param {integer} selectedIndex
 	 */
 	updateCombinedLegend : function(legendValueMap, timestamp, value, yLabel, selectedIndex) {
-		timestamp = Math.round(timestamp);
+		if(isNaN(timestamp)){
+			timestamp = null;
+		}else if(timestamp != null){
+			timestamp = Math.round(timestamp);
+		}
 
 		for (const [index, div] of legendValueMap.entries()) {
+			if(timestamp == null){
+				div.className = "legend-value";
+				div.innerHTML = "";
+				continue;
+			}
+
 			if(index == selectedIndex){
 				div.innerHTML = value.toFixed(graphs.DECIMAL_FIXED_ROUNDING) + " (" + (new Date(timestamp)).toISOString()+")";
 				div.className = "legend-value-selected";
@@ -721,15 +744,17 @@ var graphs = {
 		graphs.combinedPlot = $.plot(div, nData, options);
 
 		div.bind("plothover", function (event, pos, item) {
-			if (item) {
-				let x = item.datapoint[0];
-				let y = item.datapoint[1];
-				graphs.tooltip.html(new Date(x).toISOString() + " / " + y.toFixed(graphs.DECIMAL_FIXED_ROUNDING) + " ("+item.series.seriesLabel+"/"+item.series.label+")")
-					.css({top: item.pageY+5, left: item.pageX+5})
-					.fadeIn(200);
-				graphs.updateCombinedLegend(graphs.combinedLegendValueMap, x, y, item.series.label, item.series.seriesIndex);
-			} else {
-				graphs.tooltip.hide();
+			if(graphs.valueHighlightSelector.checked){
+				if (item) {
+					let x = item.datapoint[0];
+					let y = item.datapoint[1];
+					graphs.tooltip.html(new Date(x).toISOString() + " / " + y.toFixed(graphs.DECIMAL_FIXED_ROUNDING) + " ("+item.series.seriesLabel+"/"+item.series.label+")")
+						.css({top: item.pageY+5, left: item.pageX+5})
+						.fadeIn(200);
+					graphs.updateCombinedLegend(graphs.combinedLegendValueMap, x, y, item.series.label, item.series.seriesIndex);
+				} else {
+					graphs.tooltip.hide();
+				}
 			}
 		});
 		div.bind("plothovercleanup", function (event, pos, item) {
@@ -984,15 +1009,17 @@ var graphs = {
 		graphs.logPlot = $.plot(div, nData, options);
 
 		div.bind("plothover", function (event, pos, item) {
-			if (item) {
-				let x = item.datapoint[0];
-				let y = item.datapoint[1];
-				graphs.tooltip.html(new Date(x).toISOString() + " / " + y.toFixed(graphs.DECIMAL_FIXED_ROUNDING) + " ("+item.series.seriesLabel+"/"+item.series.label+")")
-					.css({top: item.pageY+5, left: item.pageX+5})
-					.fadeIn(200);
-				graphs.updateCombinedLegend(graphs.logLegendValueMap, x, y, item.series.label, item.series.seriesIndex);
-			} else {
-				graphs.tooltip.hide();
+			if(graphs.valueHighlightSelector.checked){
+				if (item) {
+					let x = item.datapoint[0];
+					let y = item.datapoint[1];
+					graphs.tooltip.html(new Date(x).toISOString() + " / " + y.toFixed(graphs.DECIMAL_FIXED_ROUNDING) + " ("+item.series.seriesLabel+"/"+item.series.label+")")
+						.css({top: item.pageY+5, left: item.pageX+5})
+						.fadeIn(200);
+					graphs.updateCombinedLegend(graphs.logLegendValueMap, x, y, item.series.label, item.series.seriesIndex);
+				} else {
+					graphs.tooltip.hide();
+				}
 			}
 		});
 		div.bind("plothovercleanup", function (event, pos, item) {

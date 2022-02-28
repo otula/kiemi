@@ -45,5 +45,10 @@ var uriinitializer = {
 		if (p.length > 0) {
 			document.getElementById("input-csv-separator").value = p[0];
 		}
+
+		p = urlParams.getAll("highlight-values");
+		if (p.length > 0) {
+			document.getElementById("input-highlight-values").checked = ("true".localeCompare(p[0]) == 0 ? true : false);
+		}
 	}
 };
