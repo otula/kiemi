@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnSystemUiVi
 	private static final String SESSIONSTORAGE_PASSWORD = "password"; // session storage key name
 	private static final String USERNAME = "username";
 	private static final String PASSWORD = "password";
+	private static final String PASSWORD_HIDDEN = new String(new char[PASSWORD.length()]).replace("\0", "*");
 	private static final String URL = "https://example.org/index.html";
 	private DevicePolicyManager _dpm = null;
 	private WebView _webView = null;
