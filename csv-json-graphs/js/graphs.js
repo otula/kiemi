@@ -277,7 +277,7 @@ var graphs = {
 				opts.min = ranges.xaxis.from;
 				opts.max = ranges.xaxis.to;
 			});
-			$.each(graphs.combinedPlot.getYAxes(), function(_, axis) {
+			$.each(plot.getYAxes(), function(_, axis) {
 				let opts = axis.options;
 				opts.min = ranges.yaxis.from;
 				opts.max = ranges.yaxis.to;
