@@ -1,0 +1,25 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+	width: 100%;
+}
+
+#view-settings {
+	/* TODO */
+}
+
+#view-questionare,
+#view-questionare-users,
+#view-questionare-questions,
+#view-questionare-timeSelections,
+#view-location,
+#view-location-areas {
+	margin: 5px;
+  white-space: pre-wrap;
+}
+
+.invalid-settings {
+	background-color: red;
+}

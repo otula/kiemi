@@ -1,0 +1,1175 @@
+#
+# Copyright 2021 Tampere University
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+openapi: 3.0.0
+info:
+  description: Feedback API
+  version: 1.0.0
+  title: Feedback Web API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: questionares
+    description: Manage questionares.
+  - name: locations
+    description: Manage locations.
+  - name: users
+    description: Manage users.
+paths:
+###################### QUESTIONARES API --> ###################################
+  "/questionares":
+########### GET /questionares --> ###########
+    get:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Return questionares.
+      operationId: getQuestionares
+      parameters:
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Questionare"
+########### <-- GET /questionares ###########
+########### POST /questionares --> ###########
+    post:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Add a new questionare. Only admin users may add new questionares.
+      operationId: postQuestionare
+      requestBody:
+        description: The questionare as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Questionare"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Questionare"
+########### <-- POST /questionares ###########
+  "/questionares/{questionareId}":
+########### GET /questionares/QUESTIONARE_ID --> ###########
+    get:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Return the questionare.
+      operationId: getQuestionare
+      parameters:
+        - name: questionareId
+          in: path
+          description: Return questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Questionare"
+########### <-- GET /questionares/QUESTIONARE_ID ###########
+########### PUT /questionares/QUESTIONARE_ID --> ###########
+    put:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Update the questionare.
+      operationId: putQuestionare
+      parameters:
+        - name: questionareId
+          in: path
+          description: Update questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The questionare as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Questionare"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Questionare"
+########### <-- PUT /questionares/QUESTIONARE_ID ###########
+########### DELETE /questionares/QUESTIONARE_ID --> ###########
+    delete:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Delete the questionare.
+      operationId: deleteQuestionare
+      parameters:
+        - name: questionareId
+          in: path
+          description: Delete questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+########### <-- DELETE /questionares/QUESTIONARE_ID ###########
+###################### <-- QUESTIONARES API ###################################
+###################### QUESTIONARES/USERS API --> ###################################
+  "/questionares/{questionareId}/users":
+########### GET /questionares/QUESTIONARE_ID/users --> ###########
+    get:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Return (questionare) users for the questionare.
+      operationId: getUsers
+      parameters:
+        - name: questionareId
+          in: path
+          description: Return (questionare) user for the questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuestionareUser"
+########### <-- GET /questionares/QUESTIONARE_ID/users ###########
+########### POST /questionares/QUESTIONARE_ID/users --> ###########
+    post:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Add new (questionare) user for the questionare. Note that this will not add a service level user (authentication details), but only a questionare level user (nickname).
+      operationId: postUser
+      parameters:
+        - name: questionareId
+          in: path
+          description: Update questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The user as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionareUser"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuestionareUser"
+########### <-- POST /questionares/QUESTIONARE_ID/users ###########
+###################### <-- QUESTIONARES/USERS API ###################################
+#################### QUESTIONARES/QUESTIONS API --> ###################################
+  "/questionares/{questionareId}/questions":
+########### GET /questionares/QUESTIONARE_ID/questions --> ###########
+    get:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Return questions for the questionare.
+      operationId: getQuestions
+      parameters:
+        - name: questionareId
+          in: path
+          description: Return questions for the questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Question"
+########### <-- GET /questionares/QUESTIONARE_ID/questions ###########
+########### POST /questionares/QUESTIONARE_ID/questions --> ###########
+    post:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Add a new question for the questionare.
+      operationId: postQuestion
+      parameters:
+        - name: questionareId
+          in: path
+          description: Add question for the questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The question as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Question"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Question"
+########### <-- POST /questionares/QUESTIONARE_ID/questions ###########
+  "/questionares/{questionareId}/questions/{questionId}":
+########### DELETE /questionares/QUESTIONARE_ID/questions/QUESTION_ID --> ###########
+    delete:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Delete question.
+      operationId: deleteQuestion
+      parameters:
+        - name: questionareId
+          in: path
+          description: Update questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: questionId
+          in: path
+          description: Delete question, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+########### <-- DELETE /questionares/QUESTIONARE_ID/questions/QUESTION_ID ###########
+###################### <-- QUESTIONARES/QUESTIONS API ###################################
+#################### QUESTIONARES/TIMESELECTIONS API --> ###################################
+  "/questionares/{questionareId}/timeSelections":
+########### GET /questionares/QUESTIONARE_ID/timeSelections --> ###########
+    get:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Return time selections for the questionare.
+      operationId: getTimeSelections
+      parameters:
+        - name: questionareId
+          in: path
+          description: Return time selections for the questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TimeSelection"
+########### <-- GET /questionares/QUESTIONARE_ID/timeSelections ###########
+########### POST /questionares/QUESTIONARE_ID/timeSelections --> ###########
+    post:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Add new time selection for the questionare.
+      operationId: postTimeSelection
+      parameters:
+        - name: questionareId
+          in: path
+          description: Add time selection for the questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The time selection as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TimeSelection"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TimeSelection"
+########### <-- POST /questionares/QUESTIONARE_ID/timeSelections ###########
+  "/questionares/{questionareId}/timeSelections/{timeSelectionId}":
+########### DELETE /questionares/QUESTIONARE_ID/timeSelections/TIME_SELECTION_ID --> ###########
+    delete:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Delete time selection.
+      operationId: deleteTimeSelection
+      parameters:
+        - name: questionareId
+          in: path
+          description: Update questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: timeSelectionId
+          in: path
+          description: Delete time selection, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+########### <-- DELETE /questionares/QUESTIONARE_ID/timeSelections/TIME_SELECTION_ID ###########
+###################### <-- QUESTIONARES/TIMESELECTIONS API ###################################
+###################### QUESTIONARES/ANSWERS API --> ###################################
+  "/questionares/{questionareId}/answers":
+########### GET /QUESTIONARES/QUESTIONARE_ID/ANSWERS --> ###########
+    get:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Return answers for the questionare.
+      operationId: getAnswers
+      parameters:
+        - name: questionareId
+          in: path
+          description: Return answer(s) for the questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: from
+          in: query
+          required: false
+          example: 1970-01-01T00:00:00Z
+          description: Select data submitted after the given value (inclusive), in ISO8601 format.
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          required: false
+          example: 3000-12-31T23:59:59Z
+          description: Select data submitted before the given value (inclusive), in ISO8601 format.
+          schema:
+            type: string
+            format: date-time
+        - name: start_time
+          in: query
+          required: false
+          example: 00:00:00Z
+          description: Select data with report timestamp of given value or greater (inclusive), in UTC time 00:00:00Z.
+          schema:
+            type: string
+        - name: end_time
+          in: query
+          required: false
+          example: 23:59:59Z
+          description: Select data with report timestamp of given value or lesser (inclusive), in UTC time 00:00:00Z.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Answer"
+########### <-- GET /QUESTIONARES/QUESTIONARE_ID/ANSWERS ###########
+########### POST /QUESTIONARES/QUESTIONARE_ID/ANSWERS --> ###########
+    post:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Add new answer for the questionare.
+      operationId: postAnswer
+      parameters:
+        - name: questionareId
+          in: path
+          description: Add new answer for the questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The answer as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Answer"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Answer"
+########### <-- POST /QUESTIONARES/QUESTIONARE_ID/ANSWERS ###########
+  "/questionares/{questionareId}/answers/{answerId}":
+########### DELETE /questionares/QUESTIONARE_ID/answers/ANSWER_ID --> ###########
+    delete:
+      tags:
+        - questionares
+      security:
+        - BasicAuth: []
+      summary: Delete answer from the questionare.
+      operationId: deleteAnswer
+      parameters:
+        - name: questionareId
+          in: path
+          description: Delete answer from the questionare, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: answerId
+          in: path
+          description: Delete answer, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+########### <-- DELETE /questionares/QUESTIONARE_ID/answers/ANSWER_ID ###########
+###################### <-- QUESTIONARES/ANSWERS API ###################################
+#################### LOCATIONS API --> ###################################
+  "/locations":
+########### GET /locations --> ###########
+    get:
+      tags:
+        - locations
+      security:
+        - BasicAuth: []
+      summary: Return locations.
+      operationId: getLocations
+      parameters:
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Location"
+########### <-- GET /locations ###########
+########### POST /locations --> ###########
+    post:
+      tags:
+        - locations
+      security:
+        - BasicAuth: []
+      summary: Add new location. Only admin users may add new locations.
+      operationId: postLocation
+      requestBody:
+        description: The location as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Location"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Location"
+########### <-- POST /locations ###########
+  "/locations/{locationId}":
+########### GET /locations/LOCATION_ID --> ###########
+    get:
+      tags:
+        - locations
+      security:
+        - BasicAuth: []
+      summary: Get location.
+      operationId: getLocation
+      parameters:
+        - name: locationId
+          in: path
+          description: Get location, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Location"
+########### <-- GET /locations/LOCATION_ID ###########
+########### DELETE /locations/LOCATION_ID --> ###########
+    delete:
+      tags:
+        - locations
+      security:
+        - BasicAuth: []
+      summary: Delete location. Only admin users may delete locations.
+      operationId: deleteLocation
+      parameters:
+        - name: locationId
+          in: path
+          description: Delete location, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+########### <-- DELETE /locations/LOCATION_ID ###########
+###################### <-- LOCATIONS API ###################################
+###################### LOCATIONS/AREAS API --> ###################################
+  "/locations/{locationId}/areas":
+########### GET /LOCATIONS/LOCATION_ID/AREAS --> ###########
+    get:
+      tags:
+        - locations
+      security:
+        - BasicAuth: []
+      summary: Return areas for the lcoation.
+      operationId: getAreas
+      parameters:
+        - name: locationId
+          in: path
+          description: Return area(s) for the location, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Area"
+########### <-- GET /LOCATIONS/LOCATION_ID/AREAS  ###########
+########### POST /LOCATIONS/LOCATION_ID/AREAS --> ###########
+    post:
+      tags:
+        - locations
+      security:
+        - BasicAuth: []
+      summary: Add area for the location. Only admin users may add new areas.
+      operationId: postArea
+      parameters:
+        - name: locationId
+          in: path
+          description: Add new area for the location, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The area as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Area"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Area"
+########### <-- POST /LOCATIONS/LOCATION_ID/AREAS ###########
+  "/locations/{locationId}/areas/{areaId}":
+########### DELETE /LOCATIONS/LOCATION_ID/AREAS/AREA_ID --> ###########
+    delete:
+      tags:
+        - locations
+      security:
+        - BasicAuth: []
+      summary: Delete area from the location. Only admin users may delete areas.
+      operationId: deleteArea
+      parameters:
+        - name: locationId
+          in: path
+          description: Delete area from the location, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: areaId
+          in: path
+          description: Delete area, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+########### <-- DELETE /LOCATIONS/LOCATION_ID/AREAS/AREA_ID ###########
+###################### <-- LOCATIONS/AREAS API ###################################
+###################### USERS API --> ###################################
+  "/users/{userId}":
+########### GET /users/USER_ID --> ###########
+    get:
+      tags:
+        - users
+      security:
+        - BasicAuth: []
+      summary: Get user with the given id. Non-admin users can only retrieve their own information.
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          description: Retrieve user, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+########### <-- GET /users/USER_ID ###########
+########### DELETE /users/USER_ID --> ###########
+    delete:
+      tags:
+        - users
+      security:
+        - BasicAuth: []
+      summary: Delete user with the given id. User can only delete itself. Admin users can delete anyone.
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          description: Delete user, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+########### <-- DELETE /users/USER_ID ###########
+  "/users":
+########### GET /users --> ###########
+    get:
+      tags:
+        - users
+      security:
+        - BasicAuth: []
+      summary: Retrieve the currently authenticated user.
+      operationId: getAuthenticatedUser
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+########### <-- GET /users ###########
+########### POST /users --> ###########
+    post:
+      tags:
+        - users
+      security:
+        - BasicAuth: []
+      summary: Add new user.
+      operationId: postUser
+      parameters:
+        - name: token
+          in: query
+          description: Authentication token to use in creating new user.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The user as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+########### <-- POST /users ###########
+  "/users/tokens":
+########### POST /users/tokens --> ###########
+    post:
+      tags:
+        - users
+      security:
+        - BasicAuth: []
+      summary: Create new authentication token that can be used to create new users. Only admin users may create new tokens.
+      operationId: postToken
+      parameters:
+        - name: questionare_id
+          in: query
+          description: Give the user (read-only) access to the given questionares.
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserToken"
+########### <-- POST /users/tokens ###########
+###################### <-- USERS API ###################################
+servers:
+  - url: http://localhost/questionares
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+###################### QUESTIONARE --> ##################################
+    Questionare:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          maxLength: 256
+        description:
+          type: string
+          maxLength: 1024
+        locationId:
+          type: integer
+          format: int64
+        useServiceUsers:
+          type: boolean
+          description: Setting this to false will enable the use and creation of anonymous users and "nicknames" and disables storing of authenticated user's identifier to answers. Setting this value to true will disable anonymous users and "nicknamed" (user) lists and answers will be linked to the authenticated user. Note that this value cannot be changed after the questionare has been created.
+      required:
+        - name
+        - useServiceUsers
+###################### <-- QUESTIONARE ##################################
+###################### QUESTIONVALUE --> ##################################
+    QuestionValue:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int64
+        text:
+          type: string
+          maxLength: 1024
+        imageUrl:
+          type: string
+          maxLength: 1024
+        colorHint:
+          type: string
+          maxLength: 7
+          description: HTML color (#000000) hint for this choise to be used when displayed in UI. Clients may or may not respect this.
+      required:
+        - value
+        - text
+###################### <-- QUESTIONVALUE ##################################
+###################### QUESTION --> ##################################
+    Question:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        text:
+          type: string
+          maxLength: 1024
+        indexNro:
+          type: integer
+          format: int32
+        maxSelections:
+          type: integer
+          format: int32
+          description: Maximum number of value selections for this question.
+        defaultValue:
+          type: integer
+          format: int32
+        value:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionValue"
+      required:
+        - indexNro
+        - value
+        - maxSelections
+###################### <-- QUESTION ##################################
+###################### TIMESELECTION --> ##################################
+    TimeSelection:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          maxLength: 256
+        start:
+          type: string
+          description: UTC time in 00:00:00Z (HOURS:MINUTES:SECONDSZ) format.
+        end:
+          type: string
+          description: UTC time in 00:00:00Z (HOURS:MINUTES:SECONDSZ) format.
+      required:
+        - name
+        - start
+        - end
+###################### <-- TIMESELECTION ##################################
+###################### QUESTIONAREUSER --> ##################################
+    QuestionareUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        username:
+          type: string
+          maxLength: 256
+      required:
+        - username
+###################### <-- QUESTIONAREUSER ##################################
+###################### ANSWER --> ##################################
+    Answer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        areaId:
+          type: array
+          items:
+            type: integer
+            format: int64
+        questionAnswer:
+          type: array
+          items:
+            type: object
+            properties:
+              questionId:
+                type: integer
+                format: int64
+              value:
+                type: integer
+                format: int32
+            required:
+              - questionId
+              - value
+        reportTimestamp:
+          type: array
+          items:
+            type: object
+            properties:
+              start:
+                type: string
+                format: date-time
+                description: Start time for the report in ISO8601 format.
+              end:
+                type: string
+                format: date-time
+                description: End time for the report in ISO8601 format.
+              continuous:
+                type: boolean
+            required:
+              - start
+              - end
+              - continuous
+        submitTimestamp:
+          type: string
+          format: date-time
+          description: Submit timestamp, if not given, the service generate submission timestamp.
+      required:
+        - questionAnswer
+        - reportTimestamp
+###################### <-- ANSWER ##################################
+###################### LOCATION --> ##################################
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        areaImageUrl:
+          type: string
+          maxLength: 1024
+        name:
+          type: string
+          maxLength: 256
+        description:
+          type: string
+          maxLength: 1024
+###################### <-- LOCATION ##################################
+###################### COORDINATE --> ##################################
+    Coordinate:
+      type: object
+      properties:
+        x:
+          type: integer
+          format: int32
+        y:
+          type: integer
+          format: int32
+      required:
+        - x
+        - y
+###################### <-- COORDINATE ##################################
+###################### AREA --> ##################################
+    Area:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          maxLength: 256
+        polygon:
+          type: array
+          items:
+            $ref: "#/components/schemas/Coordinate"
+        description:
+          type: string
+          maxLength: 1024
+      required:
+        - name
+###################### <-- AREA ##################################
+###################### USER --> ##################################
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 256
+        password:
+          type: string
+          format: password
+          maxLength: 256
+        id:
+          type: integer
+          format: int64
+      required:
+        - username
+        - password
+###################### <-- USER ##################################
+###################### USERTOKEN --> ##################################
+    UserToken:
+      type: object
+      properties:
+        token:
+          type: string
+          maxLength: 256
+        link:
+          type: string
+        questionareId:
+          type: array
+          items:
+            type: integer
+            format: int64
+      required:
+        - key
+###################### <-- USERTOKEN ##################################

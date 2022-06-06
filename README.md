@@ -34,6 +34,9 @@ NB-IoT-Temperature-Prototype
 - Can be used to send CIMI, temperature measurements, voltage and signal strength to a remote server using HTTP
 - Uses DS18x20-uart-opencpu 1-wire protocol implementation for sensor communications
 
+osku
+- Spring Boot App (service) for collecting feedback about living and working conditions in buildings
+
 License
 -------
 

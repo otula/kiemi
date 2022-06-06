@@ -1,0 +1,160 @@
+/**
+ * Copyright 2021 Tampere University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ *
+ */
+#main-view-timeselection-picker {
+  display: grid;
+  grid-template-areas: "infoStart" "timeStart" "dateStart" "infoEnd" "timeEnd" "dateEnd";
+  justify-items: center;
+}
+
+/**
+ *
+ */
+#info-text-start-time {
+  grid-area: infoStart;
+  font: normal normal 17px/16px Roboto;
+}
+
+/**
+ *
+ */
+#info-text-end-time {
+  grid-area: infoEnd;
+  font: normal normal 17px/16px Roboto;
+}
+
+/**
+ *
+ */
+.timepicker-start-time-container,
+.timepicker-end-time-container,
+.timepicker-start-date-container,
+.timepicker-end-date-container {
+  width: 90%;
+}
+
+/**
+ * time picker date selector containers
+ */
+.timepicker-start-date-container {
+  grid-area: dateStart;
+  text-align: center;
+}
+
+/**
+ *
+ */
+.timepicker-end-date-container {
+  grid-area: dateEnd;
+  text-align: center;
+}
+
+/**
+* time picker time selector container
+*/
+.timepicker-start-time-container {
+  grid-area: timeStart;
+  text-align: center;
+}
+
+/**
+ *
+ */
+.timepicker-end-time-container {
+  grid-area: timeEnd;
+  text-align: center;
+}
+
+/**
+ *
+ */
+.scrollable {
+  overflow: auto;
+  width: 70px;
+  height: 80px;
+  border: 1px silver solid;
+}
+
+/**
+ *
+ */
+.scrollable select {
+  border: none;
+}
+
+/**
+ *
+ */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-align: center;
+  height: 12vw;
+  max-height: 45px;
+  background-color: white;
+  border: 1px solid lightgray;
+  font: normal normal 17px/16px Roboto;
+  background: url(/feedback/images/arrow-down-circle.svg) no-repeat 98%;
+  background-size: 10%, 10%;
+  background-color: white;
+}
+
+/**
+ *
+ */
+.timepicker-year {
+  height: 12vw;
+  max-height: 45px;
+  background-color: white;
+  border: 1px solid lightgray;
+  font: normal normal 17px/16px Roboto;
+}
+
+/**
+ *
+ */
+#main-view-timeselection-picker-start-time,
+#main-view-timeselection-picker-end-time {
+  width: 250px;
+}
+
+/**
+ *
+ */
+#main-view-timeselection-picker-start-day,
+#main-view-timeselection-picker-end-day {
+  width: 50px;
+}
+
+/**
+ *
+ */
+#main-view-timeselection-picker-start-month,
+#main-view-timeselection-picker-end-month {
+  width: 122px;
+}
+
+/**
+ *
+ */
+#main-view-timeselection-picker-start-year,
+#main-view-timeselection-picker-end-year {
+  width: 65px;
+}

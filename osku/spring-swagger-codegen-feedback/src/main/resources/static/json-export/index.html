@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2021 Tampere University
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/json-export.css">
+    <title>Feedback JSON Export page</title>
+    <script src="/feedback/js/lib/jquery-3.6.0.min.js"></script>
+    <!-- from: http://jquery.com -->
+    <script src="/feedback/js/definitions.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="/feedback/js/feedback-api.js"></script>
+    <script src="js/json-export.js"></script>
+  </head>
+
+  <body onload="jsonexport.initialize()">
+	  <div id="view-settings">
+			<label for="input-username">Käyttäjätunnus</label><input type="text" name="username" id="input-username"/><br>
+			<label for="input-password">Salasana</label> <input type="password" name="password" id="input-password"/><br>
+			<label for="input-questionare-id">Questionare id</label> <input type="number" min="1" id="input-questionare-id"/><br>
+      <label for="input-split-arrays">Jaa taulukot</label><input type="checkbox" id="input-split-arrays">
+      <label for="input-clear-ids">Poista Id:t</label><input type="checkbox" id="input-clear-ids">
+      <button onclick="jsonexport.retrieveJSON()">Nouda</button>
+	  </div>
+    <h1>Questionare:</h1>
+		<div id="view-questionare"> <!-- populated dynamically --></div>
+    <h1>Questionare / questions:</h1>
+		<div id="view-questionare-questions"> <!-- populated dynamically --></div>
+    <h1>Questionare / time selections:</h1>
+		<div id="view-questionare-timeSelections"> <!-- populated dynamically --></div>
+    <h1>Questionare / users:</h1>
+		<div id="view-questionare-users"> <!-- populated dynamically --></div>
+    <h1>Location:</h1>
+		<div id="view-location"> <!-- populated dynamically --></div>
+    <h1>Location / areas:</h1>
+		<div id="view-location-areas"> <!-- populated dynamically --></div>
+  </body>
+</html>

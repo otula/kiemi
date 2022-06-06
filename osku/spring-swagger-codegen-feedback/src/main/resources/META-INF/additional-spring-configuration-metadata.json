@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "permissions.link.baseuri",
+    "type": "java.lang.String",
+    "description": "Base uri for user creation web page."
+  },
+  {
+    "name": "permissions.token.length",
+    "type": "java.lang.String",
+    "description": "Length of the user token (number of characters). Note that this must not exceed the service defined maximum password length (by default: 256)."
+  }
+]}

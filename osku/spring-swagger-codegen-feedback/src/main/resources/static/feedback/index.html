@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2021 Tampere University
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/timepicker.css">
+    <link rel="stylesheet" type="text/css" href="css/feedback.css">
+    <title>Feedback Web Page</title>
+    <script src="js/lib/jquery-3.6.0.min.js"></script>
+    <!-- from: http://jquery.com -->
+    <script src="js/definitions.js"></script>
+    <script src="/user/js/definitions.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/timepicker.js"></script>
+    <script src="js/feedback-api.js"></script>
+    <script src="js/feedback-ui.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+  </head>
+  <body onload="feedbackui.initialize()">
+    <div id="main-container">
+      <div id="upper_banner"></div>
+      <div id="main-view">
+        <div id="main-view-users" class="hidden">
+          <div id="main-view-users-multi" class="hidden">
+            <h1 class="page-header">valitse käyttäjä</h1>
+            <div class="main-view-users-welcome-text">
+              <!-- populated dynamically -->
+            </div>
+            <div id="main-view-users-userlist">
+              <!-- populated dynamically -->
+            </div>
+          </div>
+          <div id="main-view-users-single" class="hidden welcome-message">
+            <h1>Hei <span id="main-view-users-single-username"></span></h1>
+            <div class="main-view-users-welcome-text">
+              <!-- populated dynamically -->
+            </div>
+            <div id="long-help-text" class="hidden">
+              <h2>OSKU-palautesovelluksen käyttöhjeet</h2>
+              <p class="info_text_justified">OSKU-palautesovelluksen avulla kiinteistön käyttäjät voivat antaa palautetta kiinteistöön liittyvistä
+                kokemuksistaan. Palaute käsitellään luottamuksellisesti, ja sen perusteella kehitetään kiinteistön
+                olosuhteita vastaamaan paremmin käyttäjien
+                tarpeita.<br><br> OSKU-palautesovellus on osa KIEMI-hankkeen tuottamia pilotteja. Lisätietoja hankkeesta
+                saat WWW-sivulta <a href="https://www.avoinsatakunta.fi/kiemi/"
+                  target="_blank">https://www.avoinsatakunta.fi/kiemi/</a>.
+              </p>
+              <p>OSKU-sovelluksessa on seuraavat näkymät: </p>
+              <ol style="text-align: left;">
+                <li>kirjautuminen</li>
+                <li>tervetuloa</li>
+                <li>kiinteistön tilan valinta</li>
+                <li>palautteeseen liittyvien kokemusten valinta</li>
+                <li>kokemuksien tapahtuma-ajan valinta</li>
+                <li>kiitos!</li>
+              </ol>
+              <p>Näkymiin liittyvät valinnat on selostettu alla omien otsikoidensa alla.</p>
+
+              <h3>Käyttäjätunnukset ja kirjautuminen</h3>
+              <p class="info_text_justified">OSKU-palautesovelluksen käytön aloittaaksesi sinulla pitää olla käyttäjätunnus ja salasana, joiden
+                avulla voit kirjautua sovellukseen.</p>
+              <p class="info_text_justified">Jotta voit antaa palautetta, käyttäjätunnus ja salasana täytyy syöttää OSKU:n kirjautumissivulla. Kun
+                oikea käyttäjätunnus ja salasana on syötetty sivulle, siirtyy OSKU "Tervetuloa"-näkymään.</p>
+
+              <h3>Tervetuloa</h3>
+              <p class="info_text_justified">Tervetuloa-näkymässä voit lukea OSKU:n yleiset käyttöohjeet napsauttamalla "NÄYTÄ OHJE"-painiketta.
+                "ALOITA"-painiketta painamalla pääset aloittamaan palautekyselyn.</p>
+
+              <h3>Kiinteistön tilan valinta (optio)</h3>
+              <p class="info_text_justified">Jos kiinteistön tilan (huoneisto tai muut aputilat) valinta on asetettu mahdolliseksi, valinta suoritetaan napsauttamalla yhtä listatuista
+                tiloista. Jos valintaa ei ole asetettu saataville, tilanvalintasivua ei ole kyselyssä.</p>
+              <p class="info_text_justified">Voit valita vain yhden tilan kerrallaan. Jos haluat antaa palautetta useaan tilaan liittyen, lähetä
+                erillinen palaute jokaista tilaa kohden.</p>
+              <p class="info_text_justified">Kun olet valinnut tilan, paina "JATKA"-painiketta, jolloin siirryt palautteeseen liittyvien kokemusten
+                valintaan.Vasemman yläreunan "TAKAISIN"-linkistä voit palata edelliseen näkymään.</p>
+
+              <h3>Palautteeseen liittyvien tuntemusten valinta</h3>
+              <p class="info_text_justified">Valitse palautteeseen liittyvät tuntemukset (painikkeet). Tuntemukset on jaettu kategorioihin, ja
+                yhdessä kategoriassa voi olla yksi tai useampi tuntemus. Voit valita jokaisesta kategoriasta yhden
+                tuntemuksen.</p>
+              <p class="info_text_justified">Kun olet valinnut tuntemukset, paina "JATKA"-painiketta, jolloin siirryt tuntemusten tapahtuma-ajan
+                valintaan. Vasemman yläreunan "TAKAISIN"-linkistä voit palata edelliseen näkymään.</p>
+
+              <h3>Tuntemusten tapahtuma-ajan valinta</h3>
+              <p class="info_text_justified">Tuntemuksiin liittyvän tapahtuma-ajan valinnassa asetetaan tuntemusten alku- ja loppuajat. Oletuksena
+                valittuna on nykyhetki, mutta voit vaihtaa arvoja kenttiä painamalla ja valitsemalla uuden arvon
+                avautuvalta listalta.</p>
+              <p class="info_text_justified">Kun tapahtuma-aika on valittu, paina "JATKA"-painiketta, jolloin siirryt "Kiitos!"-näkymään. Vasemman
+                yläreunan "TAKAISIN"-linkistä voit palata edelliseen näkymään.</p>
+              <h3>Kiitos!</h3>
+              <p class="info_text_justified">Tässä näkymässä sinua kiitetään palautteestasi. Kun saavut tähän näkymään, on palautteesi tallennettu.
+              </p>
+              <p class="info_text_justified">Lyhyen ajan kuluttua OSKU-sovellus siirtyy automaattisesti takaisin "Tervetuloa"-näkymään, ja voit
+                halutessasi aloittaa uuden palautteen antamisen.</p>
+            </div>
+            <button class="right_side_button black_button continue_button"
+              onclick="feedbackui.nextPage()">Aloita</button>
+            <button id="show-long-help-text" class="black_button right_side_button continue_button"
+              onclick="feedbackui.showLongHelpText()">Näytä ohje</button>
+          </div>
+        </div>
+        <div id="main-view-areaselection" class="hidden">
+          <h1 class="page-header">valitse kiinteistön tila</h1>
+          <p class="info_text">Alla on listattu kiinteistön tilat (huoneisto tai muut aputilat), joihin liittyen voit
+            antaa palautetta. Voit valita vain yhden tilan.</p>
+          <div id="main-view-areaselection-image" class="hidden">
+            <canvas id="main-view-areaselection-canvas"></canvas>
+          </div>
+          <div id="main-view-areaselection-list" class="hidden">
+            <!-- populated dynamically -->
+          </div>
+        </div>
+        <div id="main-view-questions" class="hidden">
+          <h1 class="page-header">valitse tuntemus</h1>
+          <p class="info_text">Valitse yksi tai useampi tuntemustasi parhaiten kuvaava vaihtoehto.</p>
+          <div id="main-view-questions-list">
+            <!-- populated dynamically -->
+          </div>
+        </div>
+        <div id="main-view-timeselection" class="hidden">
+          <h1 class="page-header">valitse tapahtumahetki</h1>
+          <p class="info_text">Valitse tapahtumahetki, jolloin huomasit tuntemuksesi. Havainnon ajanjakso voi olla myös
+            useita päiviä kestänyt tapahtuma.</p>
+          <div id="main-view-timeselection-list">
+            <!-- populated dynamically -->
+          </div>
+          <div id="main-view-timeselection-picker" class="hidden">
+            <p id="info-text-start-time">Valitse alkuaika</p>
+            <div class="timepicker-start-date-container">
+              <select id="main-view-timeselection-picker-start-day">
+                <option value="1">1.</option>
+                <option value="2">2.</option>
+                <option value="3">3.</option>
+                <option value="4">4.</option>
+                <option value="5">5.</option>
+                <option value="6">6.</option>
+                <option value="7">7.</option>
+                <option value="8">8.</option>
+                <option value="9">9.</option>
+                <option value="10">10.</option>
+                <option value="11">11.</option>
+                <option value="12">12.</option>
+                <option value="13">13.</option>
+                <option value="14">14.</option>
+                <option value="15">15.</option>
+                <option value="16">16.</option>
+                <option value="17">17.</option>
+                <option value="18">18.</option>
+                <option value="19">19.</option>
+                <option value="20">20.</option>
+                <option value="21">21.</option>
+                <option value="22">22.</option>
+                <option value="23">23.</option>
+                <option value="24">24.</option>
+                <option value="25">25.</option>
+                <option value="26">26.</option>
+                <option value="27">27.</option>
+                <option value="28">28.</option>
+                <option value="29">29.</option>
+                <option value="30">30.</option>
+                <option value="31">31.</option>
+              </select>
+              <select id="main-view-timeselection-picker-start-month">
+                <option value="0">tammikuuta</option>
+                <option value="1">helmikuuta</option>
+                <option value="2">maaliskuuta</option>
+                <option value="3">huhtikuuta</option>
+                <option value="4">toukokuuta</option>
+                <option value="5">kesäkuuta</option>
+                <option value="6">heinäkuuta</option>
+                <option value="7">elokuuta</option>
+                <option value="8">syyskuuta</option>
+                <option value="9">lokakuuta</option>
+                <option value="10">marraskuuta</option>
+                <option value="11">joulukuuta</option>
+              </select>
+              <input class="timepicker-year" id="main-view-timeselection-picker-start-year" type="number" min="2021"
+                max="2100">
+            </div>
+            <div class="timepicker-start-time-container">
+              <select id="main-view-timeselection-picker-start-time">
+                <!-- populated dynamically -->
+              </select>
+            </div>
+            <p id="info-text-end-time">Valitse loppuaika</p>
+            <div class="timepicker-end-date-container">
+              <select id="main-view-timeselection-picker-end-day">
+                <option value="1">1.</option>
+                <option value="2">2.</option>
+                <option value="3">3.</option>
+                <option value="4">4.</option>
+                <option value="5">5.</option>
+                <option value="6">6.</option>
+                <option value="7">7.</option>
+                <option value="8">8.</option>
+                <option value="9">9.</option>
+                <option value="10">10.</option>
+                <option value="11">11.</option>
+                <option value="12">12.</option>
+                <option value="13">13.</option>
+                <option value="14">14.</option>
+                <option value="15">15.</option>
+                <option value="16">16.</option>
+                <option value="17">17.</option>
+                <option value="18">18.</option>
+                <option value="19">19.</option>
+                <option value="20">20.</option>
+                <option value="21">21.</option>
+                <option value="22">22.</option>
+                <option value="23">23.</option>
+                <option value="24">24.</option>
+                <option value="25">25.</option>
+                <option value="26">26.</option>
+                <option value="27">27.</option>
+                <option value="28">28.</option>
+                <option value="29">29.</option>
+                <option value="30">30.</option>
+                <option value="31">31.</option>
+              </select>
+              <select id="main-view-timeselection-picker-end-month">
+                <option value="0">tammikuuta</option>
+                <option value="1">helmikuuta</option>
+                <option value="2">maaliskuuta</option>
+                <option value="3">huhtikuuta</option>
+                <option value="4">toukokuuta</option>
+                <option value="5">kesäkuuta</option>
+                <option value="6">heinäkuuta</option>
+                <option value="7">elokuuta</option>
+                <option value="8">syyskuuta</option>
+                <option value="9">lokakuuta</option>
+                <option value="10">marraskuuta</option>
+                <option value="11">joulukuuta</option>
+              </select>
+              <input class="timepicker-year" id="main-view-timeselection-picker-end-year" type="number">
+            </div>
+            <div class="timepicker-end-time-container">
+              <select id="main-view-timeselection-picker-end-time">
+                <!-- populated dynamically -->
+              </select>
+            </div>
+          </div>
+        </div>
+        <div id="main-view-thank-you" class="hidden">
+          <img class="thank-you-images" id="thumb-up" src="/feedback/images/peukku_x2.png" alt="peukutus">
+          <h1 class="thank-you-header"> kiitos!
+          </h1>
+          <p class="info_text thank-you-info"><strong>Palautteesi on nyt tallennettu!</strong> Sovellus ohjaantuu itsestään kyselyn alkuun. <br><br> OSKU-palautesovellus on osa
+            KIEMI-hankkeen tuottamia pilotteja. Lisätietoja hankkeesta saat WWW-sivulta <a
+              href="https://www.avoinsatakunta.fi/kiemi/" target="_blank">https://www.avoinsatakunta.fi/kiemi/</a>
+          </p>
+          <img class="thank-you-images" id="logos" src="/feedback/images/logos_x2.png" alt="logot">
+        </div>
+        <div id="main-view-adduser" class="hidden">
+          <div class="center">
+            <h1 id="newUserH1">luo uusi käyttäjä</h1>
+            <input id="main-view-adduser-input" type="text" placeholder="SYÖTÄ KÄYTTÄJÄNIMI" />
+            <button id="main-view-adduser-create-user-button" class="right_side_button green_button"
+              onclick="feedbackui.createUser()">LUO KÄYTTÄJÄ</button>
+            <button id="main-view-adduser-cancel-button" class="right_side_button black_button"
+              onclick="feedbackui.loadPageUsers()">PERUUTA</button>
+          </div>
+        </div>
+      </div>
+      <div id="side-view">
+        <div id="side-view-user-wide">
+          <div class="bottom_progress_grid_item" id="side-view-user">
+            <div id="side-view-user-selection" class="bottom_progress_chosen_option"></div>
+            <div class="bottom_progress_bar-wide" id="progress-bar-user-wide"></div>
+            <p class="p_progress">Käyttäjä</p>
+            <p class="p_progress"><span class='side-view-page-current'>1</span>/<span
+                class='side-view-page-max'>4</span>
+            </p>
+          </div>
+          <div class="bottom_progress_grid_item" id="side-view-area">
+            <div id="side-view-area-selection-list" class="bottom_progress_chosen_option">
+              <!-- populated dynamically -->
+            </div>
+            <div class="bottom_progress_bar-wide" id="progress-bar-area-wide"></div>
+            <p class="p_progress">Tila</p>
+            <p class="p_progress"><span class='side-view-page-current'>2</span>/<span
+                class='side-view-page-max'>4</span>
+            </p>
+          </div>
+          <div class="bottom_progress_grid_item" id="side-view-question">
+            <div id="side-view-question-selection-list" class="bottom_progress_chosen_option">
+              <!-- populated dynamically -->
+            </div>
+            <div class="bottom_progress_bar-wide" id="progress-bar-question-wide"></div>
+            <p class="p_progress">Tuntemus</p>
+            <p class="p_progress"><span class='side-view-page-current'>3</span>/<span
+                class='side-view-page-max'>4</span>
+            </p>
+          </div>
+          <div class="bottom_progress_grid_item" id="side-view-time-selection">
+            <div id="side-view-time-selection-list" class="bottom_progress_chosen_option">
+              <!-- populated dynamically -->
+            </div>
+            <div class="bottom_progress_bar-wide" id="progress-bar-time-selection-wide"></div>
+            <p class="p_progress">Tapahtumahetki</p>
+            <p class="p_progress"><span class='side-view-page-current'>4</span>/<span
+                class='side-view-page-max'>4</span>
+            </p>
+          </div>
+        </div>
+        <div id="side-view-user-narrow">
+          <div id="side-view-user-narrow-bar-container">
+            <div class="bottom_progress_bar-narrow" id="progress-bar-user-narrow"></div>
+            <div class="bottom_progress_bar-narrow" id="progress-bar-area-narrow"></div>
+            <div class="bottom_progress_bar-narrow" id="progress-bar-question-narrow"></div>
+            <div class="bottom_progress_bar-narrow" id="progress-bar-time-selection-narrow"></div>
+          </div>
+          <p class="p_progress bold900" id="side-view-user-narrow-text">Käyttäjä</p>
+          <p class="p_progress bold900"><span id="side-view-user-narrow-page"
+              class='side-view-page-current'>1</span>/<span class='side-view-page-max'>4</span></p>
+        </div>
+      </div>
+    </div>
+    <div id="error-overlay" class="hidden">
+      <!-- populated dynamically -->
+    </div>
+    <div id="wait-overlay" class="hidden">
+      <!-- populated dynamically -->
+    </div>
+  </body>
+</html>

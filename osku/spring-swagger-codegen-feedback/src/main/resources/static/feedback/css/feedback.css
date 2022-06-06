@@ -1,0 +1,944 @@
+        /**
+ * Copyright 2021 Tampere University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+        
+        html,
+        body {
+          margin: auto;
+          padding: 0;
+          background-color: #FDF9F2;
+          height: 100%;
+        }
+        /**
+ *
+ */
+        
+        #main-container {
+          margin: auto;
+          display: grid;
+          grid-template-rows: 92px 30px 1fr 60px 130px;
+          grid-template-areas: "banner" "takeMeBack" "main-content" "buttons" "progress";
+          justify-items: center;
+          height: 98%;
+          width: 100%;
+          min-width: 300px;
+          min-height: 525px;
+        }
+        /**
+ *
+ */
+        
+        #upper_banner {
+          grid-area: banner;
+          width: 100%;
+          height: 100%;
+          max-height: 200px;
+          max-width: 1200px;
+          opacity: 1;
+          background: url('/feedback/images/ylabanneri-osku-teksti.png') 5% center no-repeat, url('/feedback/images/kiemi_logo.png') 95% center no-repeat, url('/feedback/images/ylabanneri-tausta.png') left top repeat;
+          background-size: 60%, 15%, contain;
+          z-index: 101;
+        }
+        /**
+ *
+ */
+        
+        h1 {
+          text-align: center;
+          font: normal normal 900 26px/30px Roboto;
+          letter-spacing: 0px;
+          color: #585858;
+          text-transform: uppercase;
+          opacity: 1;
+          clear: both;
+        }
+        /**
+ *
+ */
+        
+        .page-header {
+          margin: 0;
+        }
+        /**
+ *
+ */
+        
+        .h1_center {
+          margin: auto;
+        }
+        /**
+ * header for the Users page
+ */
+        
+        #users_h1 {
+          width: 100%;
+        }
+        /**
+ * main view
+ */
+        
+        #main-view {
+          grid-area: main-content;
+          overflow-y: auto;
+          overflow-x: hidden;
+          margin-bottom: 15px;
+        }
+        /**
+ * bottom view / progress window wide variant
+ */
+        
+        #side-view {
+          grid-area: progress;
+          width: 900px;
+          height: 135px;
+          margin: auto;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        }
+        /**
+ *
+ */
+        
+        #side-view-user-wide {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+          justify-items: end;
+        }
+        /**
+ * bottom view / progress window narrow variant
+ */
+        
+        #side-view-user-narrow {
+          display: none;
+        }
+        /**
+ * add new user view
+ */
+        
+        #main-view-adduser {
+          margin-left: 5px;
+          margin-right: 5px;
+        }
+        /**
+ * username input
+ */
+        
+        #main-view-adduser-input {
+          width: 267px;
+          height: 48px;
+          border-radius: 180px;
+          text-align: left;
+          font: normal normal 22px Roboto;
+          letter-spacing: 1.51px;
+          color: #B7B7B7;
+          text-indent: 20px;
+        }
+        
+        #main-view-adduser-cancel-button {
+          left: 460px;
+          width: 267px;
+          height: 48px;
+        }
+        /**
+ * users view
+ */
+        
+        #main-view-users {
+          margin-left: 5px;
+          margin-right: 5px;
+          width: 100%;
+        }
+        /**
+ * users view / user list
+ */
+        
+        #main-view-users-userlist {
+          display: grid;
+          /* grid-template-columns: repeat(4, 250px); */
+          grid-template-columns: repeat( auto-fit, minmax(280px, 1fr));
+          grid-gap: 0.75em;
+          justify-items: center;
+        }
+        /**
+ * area selection view
+ */
+        
+        #main-view-users-multi {
+          width: 98vw;
+          max-width: 1600px;
+        }
+        
+        #main-view-areaselection {
+          margin-left: 5px;
+          margin-right: 5px;
+          width: 98vw;
+        }
+        /**
+ * question view
+ */
+        
+        #main-view-questions {
+          margin-left: 5px;
+          margin-right: 5px;
+          width: 98vw;
+        }
+        /**
+ *
+ */
+        
+        #main-view-questions-list {
+          display: grid;
+          /* grid-template-columns: repeat(4, 320px); */
+          grid-template-columns: repeat( auto-fit, minmax(330px, 1fr));
+          justify-content: center;
+          grid-gap: 0.75em;
+        }
+        /**
+ *
+ */
+        
+        #main-view-areaselection-list {
+          display: grid;
+          grid-template-columns: repeat( auto-fit, minmax(330px, 1fr));
+          justify-content: center;
+        }
+        /**
+ * time selection view
+ */
+        
+        #main-view-timeselection {
+          margin-left: 5px;
+          margin-right: 5px;
+        }
+        /**
+ *
+ */
+        
+        #main-view-timeselection-list {
+          display: grid;
+          grid-template-columns: repeat( auto-fit, minmax(390px, 1fr));
+          justify-content: center;
+          grid-gap: 0.75em;
+        }
+        /**
+ *
+ */
+        
+        #main-view-timeselection-list .time-selection button {
+          width: 360px;
+        }
+        /**
+ * side view area selection list
+ */
+        
+        #side-view-area-selection-list,
+        #side-view-question-selection-list,
+        #side-view-time-selections-list {
+          overflow: hidden;
+        }
+        /**
+ * an area selection in side view
+ */
+        
+        .side-view-area-selection {
+          /* nothing needed */
+        }
+        /**
+ * a question selection in side-view
+ */
+        
+        .side-view-question-selection {
+          /* nothing needed */
+        }
+        /**
+ * a time selection in side-view
+ */
+        
+        .side-view-time-selection {
+          /* nothing needed */
+        }
+        /**
+ * Error message overlay
+ */
+        
+        #error-overlay:not(.hidden) {
+          z-index: 300;
+          bottom: 0;
+          position: fixed;
+          background-color: rgba(255, 0, 0, 0.7);
+          width: 100%;
+          height: 100%;
+          display: table;
+        }
+        /**
+ * wait message overlay
+ */
+        
+        #wait-overlay:not(.hidden) {
+          z-index: 200;
+          bottom: 0;
+          position: fixed;
+          background-color: rgba(255, 255, 255, 0.7);
+          width: 100%;
+          height: 100%;
+          display: table;
+        }
+        /**
+ * full screen overlay text
+ */
+        
+        .overlay-text {
+          font: normal normal 900 26px/30px Roboto;
+          letter-spacing: 0px;
+          color: #585858;
+          display: table-cell;
+          vertical-align: middle;
+          text-align: center
+        }
+        /**
+ *	area selection canvas
+ */
+        
+        #main-view-areaselection-canvas {
+          position: absolute;
+          left: calc((100vw - 692px)/2);
+          padding: 0px;
+          height: 432px;
+          width: 692px;
+          margin: auto;
+        }
+        /**
+ *
+ */
+        
+        .hidden {
+          display: none !important;
+        }
+        /**
+ * a user in a user list
+ */
+        
+        .user button {
+          height: 48px;
+          width: 250px;
+          margin: 0 16px 0 0;
+          padding-left: 15px;
+          text-align: left;
+          font: normal normal 450 22px Roboto;
+          letter-spacing: 1.51px;
+          background-color: #fff;
+          opacity: 1;
+          border-radius: 180px;
+          border: 1px solid lightgray;
+        }
+        /**
+ * a time selection in the time selections list
+ */
+        
+        .time-selection {
+          /* nothing needed */
+        }
+        /**
+ * a question (container) in the questions list
+ */
+        
+        .question {
+          /* nothing needed */
+        }
+        /**
+ * a question in the questions list
+ */
+        
+        .question-text {
+          text-align: center;
+          font: normal normal normal 20px/24px Roboto;
+          color: #585858;
+          opacity: 1;
+          margin-bottom: 5px;
+        }
+        /**
+ *
+ */
+        
+        .question-option-text {
+          /* nothing needed */
+        }
+        /**
+ * image for a value for a question
+ */
+        
+        .question-value-image {
+          float: left;
+          width: auto;
+          height: 30px;
+          margin: 10px 10px 0 10px;
+        }
+        /**
+ *
+ */
+        
+        .bottom_progress_grid_item {
+          grid-column-gap: 15px;
+          width: 100%;
+        }
+        /**
+ *
+ */
+        
+        .bottom_progress_chosen_option {
+          width: 100%;
+          height: 60px;
+          text-align: left;
+          font: italic normal bold 16px/19px Roboto;
+          letter-spacing: 0px;
+          color: #707070;
+          opacity: 1;
+        }
+        /**
+ *
+ */
+        
+        .bottom_progress_bar-wide {
+          width: 100%;
+          height: 20px;
+          border: 1px solid #585858;
+          transform: matrix(-1, 0, 0, -1, 0, 0);
+        }
+        /**
+ *
+ */
+        
+        .bottom_progress_bar-narrow {
+          height: 5px;
+          border: 1px solid #585858;
+          transform: matrix(-1, 0, 0, -1, 0, 0);
+          margin-bottom: 5px;
+          float: left;
+        }
+        /**
+ *
+ */
+        
+        .p_progress {
+          text-align: center;
+          font: normal normal 18px/16px Roboto;
+          letter-spacing: 0px;
+          color: #585858;
+          opacity: 1;
+          margin: 5px;
+          padding: 0;
+        }
+        /**
+ *
+ */
+        
+        .bottom_progress_bar_current {
+          background-color: rgb(178, 178, 178);
+        }
+        /**
+ *
+ */
+        
+        .bottom_progress_bar_completed {
+          background-color: rgb(134, 217, 54);
+        }
+        /**
+ *
+ */
+        
+        .bigger_font {
+          font-weight: 900;
+          font-size: 20px;
+          margin-right: 10px;
+        }
+        /**
+ *
+ */
+        
+        .userlist_buttons {
+          grid-area: buttons;
+        }
+        /**
+ *
+ */
+        
+        .right_side_button {
+          width: 220px;
+          height: 48px;
+          margin: 0 auto;
+          padding-left: 15px;
+          text-align: center;
+          /* font: normal normal 400 14px/16px Roboto; */
+          font: normal normal 500 18px Roboto;
+          letter-spacing: 1.51px;
+          background-color: #fff;
+          opacity: 1;
+          border-radius: 180px;
+          border: 1px solid lightgray;
+          cursor: pointer;
+        }
+        /**
+ *
+ */
+        
+        .green_button {
+          background-color: #86D936;
+          color: #fff;
+          border: 1px solid #03DAC5;
+          font-weight: 500;
+        }
+        /**
+ *
+ */
+        
+        .black_button {
+          background-color: #000;
+          color: #fff;
+          /* font-weight: 300;
+  font-size: 13px; */
+        }
+        /**
+ *
+ */
+        
+        .back-link {
+          z-index: 101;
+        }
+        /**
+ *
+ */
+        
+        .continue_button {
+          width: 116px;
+          height: 48px;
+          margin: 5px;
+          text-align: center;
+          /* font: normal normal 500 14px/16px Roboto; */
+          letter-spacing: 0.48px;
+          color: #FFFFFF;
+          text-transform: uppercase;
+          opacity: 1;
+          padding: 0;
+        }
+        /**
+ *
+ */
+        
+        .center {
+          margin: auto;
+          width: 400px;
+          display: grid;
+          grid-template-rows: repeat(3, 75px);
+          row-gap: 20px;
+          justify-items: center;
+        }
+        /**
+ *
+ */
+        
+        #newUserH1 {
+          position: absolute;
+          top: 24px;
+          left: 14px;
+          width: 1163px;
+          height: 30px;
+          text-align: center;
+        }
+        /**
+ *
+ */
+        
+        .info_text {
+          text-align: left;
+          font: normal normal normal 22px Roboto;
+          letter-spacing: 0px;
+          color: #585858;
+          opacity: 1;
+        }
+        /**
+ *
+ */
+        
+        .info_text_justified {
+          text-align: justify;
+          font: normal normal normal 22px Roboto;
+          letter-spacing: 0px;
+          color: #585858;
+          opacity: 1;
+        }
+        /**
+ * a value for a question
+ */
+        
+        .question-value {
+          width: 302px;
+          text-align: left;
+          margin-bottom: 20px;
+          padding: 0;
+          color: #fff;
+          opacity: 0.3;
+          background-color: #0000FF;
+        }
+        /**
+ *
+ */
+        
+        .question-value-selected {
+          opacity: 1;
+        }
+        /**
+ *
+ */
+        
+        #side-view-user-selection,
+        #side-view-area-selection-list,
+        #side-view-question-selection-list,
+        #side-view-time-selection-list {
+          overflow: hidden;
+        }
+        /**
+ * a selected value for a question
+ */
+        
+        .user-value-selected,
+        .time-selection-selected,
+        .time-reoccurring-selected {
+          background-color: #86D936 !important;
+        }
+        /**
+ *
+ */
+        
+        .area-selection-selected,
+        .question-value-selected,
+        .time-selection-selected,
+        .time-reoccurring-selected {
+          background-image: url(/feedback/images/checkmark2_x2.png) !important;
+          background-repeat: no-repeat;
+          background-position: 97% center;
+          background-size: 29px;
+        }
+        /**
+ *
+ */
+        
+        .time-selection-selected {
+          background-position: 315px center !important;
+        }
+        /**
+ *
+ */
+        
+        .time-reoccurring-selected {
+          background-position: 178px center !important;
+        }
+        /**
+ *
+ */
+        
+        .back-link {
+          background-color: #FDF9F2;
+          color: #585858;
+          font: normal normal 500 18px Roboto;
+          text-decoration: underline;
+          width: 100%;
+          grid-area: takeMeBack;
+        }
+        /**
+ *
+ */
+        
+        #logos.thank-you-images {
+          width: 90%;
+          position: absolute;
+          bottom: 150px;
+          left: 5%;
+        }
+        /**
+ *
+ */
+        
+        #thumb-up {
+          width: 180px;
+          margin-left: calc(50% - 90px);
+          position: absolute;
+          top: 100px;
+          left: 0px;
+        }
+        /**
+ *
+ */
+        
+        .thank-you-header {
+          position: absolute;
+          top: 300px;
+          left: calc(50% - 50px);
+          width: 100px;
+        }
+        /**
+ *
+ */
+        
+        .thank-you-info {
+          position: absolute;
+          top: 345px;
+          left: 0;
+          left: 16%;
+        }
+        /**
+ *
+ */
+        
+        .bold900 {
+          font-weight: 900;
+        }
+        /**
+ *
+ */
+        
+        .selected-icon-image {
+          width: 16px;
+          margin: 0 5px;
+          color: #86D936;
+        }
+        /**
+ * active user name in the application
+ */
+        
+        #main-view-users-single-username {
+          font: normal normal 900 26px/30px Roboto;
+          letter-spacing: 0px;
+          color: #585858;
+        }
+        /**
+ * welcome message
+ */
+        
+        .welcome-message {
+          font: normal normal normal 20px/24px Roboto;
+          letter-spacing: 0px;
+          color: #585858;
+          max-width: 800px;
+          text-align: center;
+        }
+        /**
+ *
+ */
+        
+        .side-view-next-button-container {
+          z-index: 101;
+        }
+        /**
+ *
+ */
+        
+        #side-view-next-button {
+          /* nothing needed */
+        }
+        /**
+ * area selection
+ */
+        
+        .area-selection {
+          width: 302px;
+          margin-bottom: 20px;
+          padding: 0;
+          color: #fff;
+          opacity: 0.3;
+          background-color: #0000FF;
+          text-align: center;
+        }
+        /**
+ *
+ */
+        
+        .area-selection-selected {
+          opacity: 1;
+        }
+        /**
+ *
+ */
+        
+        .area-selection-text {
+          /* nothing needed */
+        }
+        /**
+ * Scroll bars
+ * From:
+ * https://www.digitalocean.com/community/tutorials/css-scrollbars
+ * https://css-tricks.com/custom-scrollbars-in-webkit/
+ **/
+        
+         ::-webkit-scrollbar {
+          width: 6px;
+        }
+        /**
+ *
+ */
+        
+         ::-webkit-scrollbar-track {
+          -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+          border-radius: 4px;
+        }
+        /**
+ *
+ */
+        
+         ::-webkit-scrollbar-thumb {
+          border-radius: 4px;
+          -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+        }
+        /**
+ *
+ */
+        
+        body {
+          scrollbar-width: thin;
+          scrollbar-color: blue orange;
+        }
+        /**
+ *
+ */
+        
+        .main-view-users-welcome-text {
+          margin-top: 20px;
+        }
+        
+        #main-view-add-user-button,
+        #main-view-skip-user-selection-button {
+          width: 267px;
+          height: 48px;
+        }
+        
+        #main-view-add-user-button,
+        #main-view-skip-user-selection-button,
+        #continue_button {
+          margin: 0 5px;
+        }
+        /**
+ *
+ */
+        /* @media only screen and (max-width: 1300px) {} */
+        /**
+ *
+ */
+        
+        @media only screen and (max-width: 1200px) {
+          #main-container {
+            grid-template-rows: 65px 30px 1fr 50px 70px;
+          }
+          #side-view {
+            width: auto;
+            height: 65px;
+            margin: auto;
+            left: 0;
+            right: 0;
+            bottom: 0;
+          }
+          #side-view-user-wide {
+            display: none;
+          }
+          #side-view-user-narrow {
+            display: grid;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 90%;
+          }
+          #side-view-user-narrow-bar-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+            justify-content: center;
+            width: 100%;
+          }
+          body {
+            max-width: 100%;
+            margin: auto;
+            font-size: 0.75em;
+          }
+          #main-view-users-userlist,
+          #main-view-areaselection-list,
+          #main-view-questions-list,
+          #main-view-timeselection-list {
+            display: grid;
+            width: 100%;
+            justify-items: center;
+          }
+          #main-view-areaselection-list {
+            justify-content: center;
+          }
+          #logos.thank-you-images {
+            bottom: 70px;
+          }
+        }
+        /**
+ *
+ */
+        
+        @media only screen and (max-width: 800px) {
+          #main-container {
+            grid-template-rows: 65px 30px 1fr 50px 70px;
+          }
+          #main-view-users-userlist,
+          #main-view-areaselection-list,
+          #main-view-questions-list,
+          #main-view-timeselection-list {
+            display: grid;
+            max-width: 100%;
+            grid-template-columns: 1fr;
+            justify-content: space-around;
+          }
+          #logos.thank-you-images {
+            bottom: 70px;
+          }
+          .info_text,
+          .main-view-users-welcome-text,
+          .back-link {
+            font: normal normal normal 18px/20px Roboto;
+          }
+          #main-view-users-single-username {
+            font-size: 1em;
+          }
+          h1,
+          h2,
+          h3 {
+            font: normal normal normal 18px/20px Roboto;
+            font-weight: 900;
+          }
+          .question {
+            border-bottom: 1px solid #B7B7B7;
+            margin-bottom: 30px;
+          }
+          .side-view-next-button-container {
+            display: flex;
+          }
+          .userlist_button {
+            width: auto;
+            height: auto;
+            padding: 5px;
+          }
+        }
+        /**
+ * hide logos on very small screens < 720p
+ */
+        
+        @media (max-height: 719px) {
+          #logos {
+            display: none;
+          }
+        }
