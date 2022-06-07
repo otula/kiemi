@@ -1,0 +1,641 @@
+  /**
+ * Copyright 2021 Tampere University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+   :root {
+    --headerHeight: 30px;
+    --sidebarWidth: 140px;
+    --color-main: #00A1A8;
+    --color-text: white;
+    --color-bg: #98D2D6;
+    --color-bg2: var(--color-text);
+    --color-bg2-effect: #f1f1f1;
+    --color-gradient1: #40B1B7;
+    --color-gradient2: var(--color-main);
+    --border: 1px solid var(--color-main);
+    --border-thick: 2px solid var(--color-main);
+    --legend-color-dimension: 1.5em;
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100vw;
+    overflow: hidden;
+    font-size: 16px;
+    font-family: 'arial';
+  }
+
+  #debugText {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    top: 0px;
+    margin: auto;
+    text-align: center;
+    z-index: 999999;
+  }
+
+  *:focus {
+    outline: none;
+  }
+  /***** HEADER *****/
+
+  #header {
+    width: 100%;
+    height: var(--headerHeight);
+    background: linear-gradient(var(--color-gradient1), var(--color-gradient2));
+    color: var(--color-text);
+    font-size: 20px;
+  }
+
+  #header .dropdown:first-child {
+    min-width: var(--sidebarWidth);
+  }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    padding: 4px 10px 4px 10px;
+  }
+
+  .dropdown-label {}
+
+  .dropdown:hover {
+    background: linear-gradient(var(--color-gradient2), var(--color-gradient1));
+  }
+
+  .dropdown-content {
+    position: absolute;
+    min-width: 160px;
+    min-height: 60px;
+    padding: 10px 6px 10px 6px;
+    background-color: var(--color-bg2);
+    color: #000000;
+    font-size: 16px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border: var(--border-thick);
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+
+  .dropdown-item {
+    padding: 6px;
+  }
+
+  .dropdown-item:hover {
+    background-color: var(--color-bg);
+  }
+  /***** SIDEBAR *****/
+
+  #sidebar {
+    display: flex;
+    flex-flow: column;
+    float: left;
+    width: var(--sidebarWidth);
+    height: calc(100% - var(--headerHeight));
+    background-color: var(--color-bg);
+    border: var(--border-thick);
+    border-style: none solid none solid;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+
+  #sidebarButtons {
+    padding: 6px;
+  }
+
+  .sidebarButton {
+    float: left;
+    padding: 4px;
+    margin: 0px 6px 0px 6px;
+    background: linear-gradient(var(--color-gradient1), var(--color-gradient2));
+    color: var(--color-text);
+  }
+
+  .sidebarButton:hover {
+    background: linear-gradient(var(--color-gradient2), var(--color-gradient1));
+  }
+
+  #sidebarContent {
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  #layerTree {
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  #layerTree22222 {
+    flex-grow: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  #layerTree>ul {
+    margin-top: 0px;
+    overflow: hidden;
+  }
+
+  #layerTree>ul>li {
+    margin-bottom: 10px;
+  }
+
+  #layerTree>ul>li:last-of-type {
+    margin-bottom: 0px;
+  }
+
+  .layerTree-item {
+    padding: 2px;
+    background-color: var(--color-bg2);
+    border-color: var(--color-bg2-effect);
+    border-width: 1px;
+    border-style: solid none none none;
+  }
+
+  /***** CONTENT *****/
+
+  #content {
+    position: relative;
+    margin-left: var(--sidebarWidth);
+    width: calc(100% - var(--sidebarWidth) - 20px);
+    height: calc(100% - var(--headerHeight) - 20px);
+    background-color: linen;
+    padding: 10px;
+  }
+
+  #content.editMode {
+    background-color: red;
+  }
+
+  #floorplan {
+    max-width: 100%;
+    max-height: 100%;
+    clip-path: inset(0px);
+  }
+
+  #floorplan img {
+    /* nothing needed */
+  }
+
+  #zoomLevel {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    padding: 4px;
+    min-width: 60px;
+    background-color: var(--color-bg2);
+    color: black;
+    text-align: center;
+  }
+
+  .sensor {
+    position: absolute;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .sensor-item {
+    display: inline-block;
+    min-width: 20px;
+    min-height: 20px;
+    background-color: lightblue;
+  }
+
+  .sensor-position {
+    max-width: 20px;
+    background-color: var(--color-main);
+    border: var(--border);
+  }
+
+  .sensor-alert {
+    max-width: 20px;
+    background-color: green;
+  }
+
+  #sensorViewData {
+    padding: 10px;
+    background-color: var(--color-bg);
+  }
+
+  #sensorViewData table {
+    padding: 10px;
+    border-collapse: collapse;
+  }
+
+  #sensorViewData table tr {
+    line-height: 24px;
+    padding: 4px;
+    background-color: var(--color-bg2);
+    border-color: var(--color-bg2-effect);
+    border-width: 1px;
+    border-style: solid none none none;
+  }
+
+  #sensorViewData table td:first-child span {
+    float: left;
+    width: 10px;
+    height: 10px;
+    margin-left: 4px;
+    margin-right: 4px;
+  }
+
+  #sensorViewData table td:nth-child(2) {
+    min-width: 140px;
+  }
+
+  #sensorViewData table td:nth-child(3) {
+    min-width: 100px;
+  }
+
+  .sensorViewGraph {
+    width: 20px;
+    height: 20px;
+    margin: 4px;
+    background-image: url(img/icon_chart.png);
+    background-size: contain;
+  }
+
+  #sensorPropertyChart {
+    width: 600px;
+    height: 400px;
+    background-color: var(--color-bg2);
+  }
+
+  #sensorDataTooltip {
+    position: absolute;
+    top: 200px;
+    left: 400px;
+    padding: 4px;
+    background-color: var(--color-bg);
+    border: var(--border-thick);
+  }
+
+  #sensorDataTooltip div:first-of-type {
+    font-weight: bold;
+  }
+
+  #sensorDataTooltip table {
+    padding: 4px;
+    border-collapse: collapse;
+  }
+
+  #sensorDataTooltip table tr {
+    background-color: var(--color-bg2);
+    border-color: var(--color-bg2-effect);
+    border-width: 1px;
+    border-style: solid none none none;
+  }
+
+  #sensorDataTooltip table td:first-child span {
+    float: left;
+    width: 10px;
+    height: 10px;
+    margin-right: 4px;
+  }
+
+  #sensorDataTooltip table td:nth-child(2) {
+    margin-right: 4px;
+  }
+
+  #sensorDataTooltip table td:nth-child(3) {
+    /* nothing needed */
+  }
+
+  .sensor-dragged {
+    opacity: 0.6;
+  }
+
+  .unpositionedSensor {
+    position: static;
+    float: left;
+    margin: unset;
+    margin-right: 6px;
+  }
+
+  #unpositionedSensors {
+    max-height: 300px;
+    min-height: 30px;
+    background-color: var(--color-bg2);
+    overflow: auto;
+  }
+
+  .unpositionedSensorContainer {
+    padding: 4px;
+    border-color: var(--color-bg2-effect);
+    border-width: 1px;
+    border-style: solid none none none;
+  }
+
+  .alert-green {
+    background-color: green;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    color: white;
+  }
+
+  .alert-yellow {
+    background-color: yellow;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    color: black;
+  }
+
+  .alert-red {
+    background-color: red;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    color: white;
+  }
+  /***** POPUP *****/
+
+  .customPopup {
+    position: absolute;
+    min-width: 150px;
+    text-align: center;
+  }
+
+  .customPopupHeader {
+    height: 30px;
+    line-height: 30px;
+    padding: 0px 4px 0 4px;
+    text-align: left;
+    background: linear-gradient(var(--color-gradient1), var(--color-gradient2));
+    color: var(--color-text);
+    cursor: move;
+  }
+
+  .customPopupClose {
+    float: right;
+    width: 15px;
+    margin-left: 5px;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    font-size: larger;
+    display: table;
+    text-align: center;
+  }
+
+  .customPopupContent {
+    padding: 10px;
+    background-color: var(--color-bg);
+    border: var(--border-thick);
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+
+  .customPopupButtons {}
+
+  #popup {
+    position: fixed;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+  }
+
+  .popupContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 30%;
+    min-height: 100px;
+    text-align: center;
+    padding: 10px;
+    background-color: var(--color-bg);
+    border: var(--border-thick);
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+
+  .popupButtons {
+    display: inline-block;
+    margin: 0px 10px 0px 10px;
+  }
+
+  .popupButton {
+    float: left;
+    width: 100px;
+    height: 24px;
+    line-height: 24px;
+    padding: 4px;
+    margin: 6px;
+    background: linear-gradient(var(--color-gradient1), var(--color-gradient2));
+    color: var(--color-text);
+  }
+
+  .popupButton.iconButton {
+    width: auto;
+    min-width: 40px;
+  }
+
+  .popupContentContent {
+    padding: 10px;
+  }
+
+  .popupButton.active {
+    outline: 2px solid var(--color-bg2-effect);
+    outline-offset: -2px;
+  }
+
+  .popupContent form label {
+    display: inline-block;
+    width: 120px;
+    padding: 4px;
+    text-align: right;
+  }
+
+  .popupContentText {
+    width: 100%;
+  }
+
+  .popupDisabled {
+    opacity: 0.2;
+  }
+
+  .list-item {
+    margin-bottom: 10px;
+    padding: 6px;
+    background-color: var(--color-bg2);
+    border: var(--border-thick);
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+
+  .list-item-sub {
+    margin: 4px 6px 4px 6px;
+  }
+
+  .list-item div {
+    text-align: left;
+    padding: 4px;
+  }
+  /***** GENERIC *****/
+
+  .centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .unselectable {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+    /*cursor: default;*/
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .titleText {
+    font-size: 24px;
+  }
+
+  .basicButton {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .selected {
+    border-color: #E04F3D;
+    border-width: 4px;
+    border-style: solid;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+
+   ::placeholder {
+    font-style: italic;
+    color: var(--color-main);
+  }
+  /**
+ * 	login message overlay
+ */
+
+  #login-overlay {
+    background-color: #98D2D6;
+    width: 100%;
+    height: 100%;
+  }
+  /**
+ * selected sensor highlight
+ */
+
+  .selectedSensor {
+    border: 5px solid red;
+  }
+  /* Legend showing sensor types on a site */
+
+  #legend {
+    background-color: white;
+    display: grid;
+  }
+
+  .legend-item {
+    margin: 0.25em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .legend-text {
+    font-weight: 900;
+    margin-left: 0.5em;
+  }
+
+  .legend-measurements {
+    margin-right: 0.5em;
+  }
+
+  .legend-text:first-letter {
+    text-transform: capitalize
+  }
+
+  .legend-color-ouman {
+    width: var(--legend-color-dimension);
+    height: var(--legend-color-dimension);
+    background-color: greenyellow;
+  }
+
+  .legend-color-ruuvi {
+    width: var(--legend-color-dimension);
+    height: var(--legend-color-dimension);
+    background-color: violet;
+  }
+
+	.legend-color-fmi {
+    width: var(--legend-color-dimension);
+    height: var(--legend-color-dimension);
+    background-color: lightgreen;
+  }
+
+  .legend-color-fourdeg {
+    width: var(--legend-color-dimension);
+    height: var(--legend-color-dimension);
+    background-color: orange;
+  }
+
+	.legend-color-porienergia {
+    width: var(--legend-color-dimension);
+    height: var(--legend-color-dimension);
+    background-color: lightblue;
+  }
+
+	.legend-color-aranet {
+    width: var(--legend-color-dimension);
+    height: var(--legend-color-dimension);
+    background-color: cyan;
+  }
+
+  /**
+   * top header bar link bar
+   */
+  #linkbar {
+    float: right;
+    height: var(--headerHeight);
+    padding: 5px;
+  }

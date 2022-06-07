@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="css/uploader.css">
+	<script src="js/lib/jquery-3.5.1.min.js"></script> <!-- https://jquery.com/ -->
+	<script src="js/uploader.js"></script>
+	<title>File uploader</title>
+</head>
+<body onload="listFiles()">
+	<div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+  	<p>Drag a file to this Drop Zone ...</p>
+	</div>
+	<div id="file-list"> <!-- populated dynamically -->
+</body>
+</html>

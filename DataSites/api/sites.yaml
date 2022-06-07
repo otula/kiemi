@@ -1,0 +1,699 @@
+#
+# Copyright 2021 Tampere University
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+openapi: 3.0.0
+info:
+  description: Sites and layers API
+  version: 1.0.0
+  title: Sites adn layers Web API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: sites
+    description: Manage sites and layer associations.
+  - name: layers
+    description: Manage Layers and sensor associations.
+  - name: sensors
+    description: Manage sensors.
+paths:
+###################### SITES API --> ###################################
+  "/sites":
+########### GET /sites --> ###########
+    get:
+      tags:
+        - sites
+      security:
+        - BasicAuth: []
+      summary: Return all known sites the user has access to.
+      operationId: getSites
+      parameters:
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Site"
+########### <-- GET /sites ###########
+########### POST /sites --> ###########
+    post:
+      tags:
+        - sites
+      security:
+        - BasicAuth: []
+      summary: Create a new site.
+      operationId: postSite
+      requestBody:
+        description: The site to create as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Site"
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Site"
+########### <-- POST /sites ###########
+  "/sites/{siteId}":
+########### GET /sites/SITE_ID --> ###########
+    get:
+      tags:
+        - sites
+      security:
+        - BasicAuth: []
+      summary: Return the requested site.
+      operationId: getSiteById
+      parameters:
+        - name: siteId
+          in: path
+          description: Return site, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Site"
+########### <-- GET /sites/SITE_ID ###########
+########### PUT /sites/SITE_ID --> ###########
+    put:
+      tags:
+        - sites
+      security:
+        - BasicAuth: []
+      summary: Update data for an existing site.
+      operationId: putSiteById
+      parameters:
+        - name: siteId
+          in: path
+          description: Update site, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The updated site data as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Site"
+      responses:
+        "200":
+          description: Successful operation.
+########### <-- PUT /sites/SITE_ID ###########
+########### DELETE /sites/SITE_ID --> ###########
+    delete:
+      tags:
+        - sites
+      security:
+        - BasicAuth: []
+      summary: Delete the requested site and all layers and levels associated with the site.
+      operationId: deleteSiteById
+      parameters:
+        - name: siteId
+          in: path
+          description: Delete the site, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation.
+########### <-- DELETE /sites/SITE_ID ###########
+  "/sites/{siteId}/layers":
+########### GET /sites/SITE_ID/layers --> ###########
+    get:
+      tags:
+        - sites
+      security:
+        - BasicAuth: []
+      summary: Return all known layers the user has access to.
+      operationId: getLayers
+      parameters:
+        - name: siteId
+          in: path
+          description: return the site, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Layer"
+########### <-- GET /sites/SITE_ID/layers ###########
+########### POST /sites/SITE_ID/layers --> ###########
+    post:
+      tags:
+        - layers
+      security:
+        - BasicAuth: []
+      summary: Create a new Layer.
+      operationId: postLayer
+      parameters:
+        - name: siteId
+          in: path
+          description: Update site, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The new layer to create as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Layer"
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Layer"
+########### <-- POST /sites/SITE_ID/layers ###########
+###################### <-- SITES API ###################################
+###################### LAYERS API --> ###################################
+  "/layers/{layerId}":
+########### GET /layers/LAYER_ID --> ###########
+    get:
+      tags:
+        - layers
+      security:
+        - BasicAuth: []
+      summary: Return the layer with the given ID.
+      operationId: getLayerById
+      parameters:
+        - name: layerId
+          in: path
+          description: return the site, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Layer"
+########### <-- GET /layers/LAYER_ID ###########
+########### PUT /layers/LAYER_ID --> ###########
+    put:
+      tags:
+        - layers
+      security:
+        - BasicAuth: []
+      summary: Update data for an existing layer.
+      operationId: putLayerById
+      parameters:
+        - name: layerId
+          in: path
+          description: Update layer, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The updated layer data as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Layer"
+      responses:
+        "200":
+          description: Successful operation.
+########### <-- PUT /layers/LAYER_ID ###########
+########### DELETE /layers/LAYER_ID --> ###########
+    delete:
+      tags:
+        - layers
+      security:
+        - BasicAuth: []
+      summary: Delete the requested layer and all layers and sensors associated with the layer.
+      operationId: deleteLayerById
+      parameters:
+        - name: layerId
+          in: path
+          description: Delete the layer, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation.
+########### <-- DELETE /layers/LAYER_ID ###########
+  "/layers/{layerId}/sensors":
+########### GET /layers/LAYER_ID/sensors --> ###########
+    get:
+      tags:
+        - layers
+      security:
+        - BasicAuth: []
+      summary: Return all known sensors the user has access to.
+      operationId: getSensors
+      parameters:
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: layerId
+          in: path
+          description: return the layer, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sensor"
+########### <-- GET /layers/LAYER_ID/sensors   ###########
+########### POST /layers/LAYER_ID/sensors   --> ###########
+    post:
+      tags:
+        - layers
+      security:
+        - BasicAuth: []
+      summary: Create a new sensor.
+      operationId: postSensor
+      parameters:
+        - name: layerId
+          in: path
+          description: Update the layer, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The sensor to create as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Sensor"
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sensor"
+########### <-- POST /layers/LAYER_ID/sensors  ###########
+  "/layers/{layerId}/layers":
+########### GET /layers/LAYER_ID/layers --> ###########
+    get:
+      tags:
+        - layers
+      security:
+        - BasicAuth: []
+      summary: Return all known layers the user has access to.
+      operationId: getLayers
+      parameters:
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: layerId
+          in: path
+          description: return the layer, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Layer"
+########### <-- GET /layers/LAYER_ID/layers   ###########
+########### POST /layers/LAYER_ID/layers   --> ###########
+    post:
+      tags:
+        - layers
+      security:
+        - BasicAuth: []
+      summary: Create a new layer.
+      operationId: postLayer
+      parameters:
+        - name: layerId
+          in: path
+          description: Update the layer, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The layer to create as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Layer"
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Layer"
+########### <-- POST /layers/LAYER_ID/layers  ###########
+###################### <-- LAYERS API ###################################
+###################### SENSORS API --> ###################################
+  "/sensors/{sensorId}":
+########### GET /sensors/SENSOR_ID --> ###########
+    get:
+      tags:
+        - sensors
+      security:
+        - BasicAuth: []
+      summary: Return the requested sensor.
+      operationId: getSensorById
+      parameters:
+        - name: sensorId
+          in: path
+          description: Return sensor, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sensor"
+########### <-- GET /sensors/SENSOR_ID ###########
+########### PUT /sensors/SENSOR_ID --> ###########
+    put:
+      tags:
+        - sensors
+      security:
+        - BasicAuth: []
+      summary: Update data for an existing sensor.
+      operationId: putSensorById
+      parameters:
+        - name: sensorId
+          in: path
+          description: Update sensor, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The updated sensor data as an HTTP body.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Sensor"
+      responses:
+        "200":
+          description: Successful operation.
+########### <-- PUT /sensors/SENSOR_ID ###########
+########### DELETE /sensors/SENSOR_ID --> ###########
+    delete:
+      tags:
+        - sensors
+      security:
+        - BasicAuth: []
+      summary: Delete the requested sensor.
+      operationId: deleteSensorById
+      parameters:
+        - name: sensorId
+          in: path
+          description: Delete the sensor, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation.
+########### <-- DELETE /sensors/SENSOR_ID ###########
+###################### <-- SENSORS API ###################################
+servers:
+  - url: http://localhost/sites
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+###################### SITE --> ###################################
+    Site:
+      type: object
+      properties:
+        #### REQUIRED --> ####
+        name:
+          type: string
+          maxLength: 256
+        #### <-- REQUIRED ####
+        #### OPTIONAL --> ####
+        description:
+          type: string
+          maxLength: 1024
+        id:
+          type: integer
+          format: int64
+        externalUrl:
+          type: string
+          description: External web link.
+          maxLength: 1024
+        organizationName:
+          type: string
+          description: Organization name for this site.
+          maxLength: 256
+        #### <-- OPTIONAL ####
+      required:
+        - name
+###################### <-- SITE ###################################
+###################### LAYER --> ################################
+    Layer:
+      type: object
+      properties:
+        #### REQUIRED --> ####
+        index:
+          type: integer
+          format: int32
+          description: Unique index for this layer, for ordering layers in a specific order.
+        name:
+          type: string
+          maxLength: 256
+        #### <-- REQUIRED ####
+        #### OPTIONAL --> ####
+        address:
+          type: string
+          description: Street address
+          maxLength: 256
+        country:
+          type: string
+          maxLength: 256
+        city:
+          type: string
+          maxLength: 256
+        description:
+          type: string
+          maxLength: 1024
+        id:
+          type: integer
+          format: int64
+        image:
+          $ref: '#/components/schemas/Image'
+          description: Optional image for the layer.
+        latitude:
+          type: number
+          format: double
+          description: Latitude for the location coordinate. If latitude is given, longitude must also be provided.
+        externalUrl:
+          type: string
+          description: External web link.
+          maxLength: 1024
+        longitude:
+          type: number
+          format: double
+          description: Longitude for the location coordinate. If longitude is given, latitude must also be provided.
+        organizationName:
+          type: string
+          description: Organization name for this site.
+          maxLength: 256
+        postalCode:
+          type: string
+          maxLength: 20
+        type:
+          type: string
+          enum: [unknown, outdoor, building, floor, room]
+          description: Type of the layer.
+        #### <-- OPTIONAL ####
+      required:
+        - index
+        - name
+        - type
+###################### <-- LAYER ################################
+###################### IMAGE --> ##################################
+    Image:
+      type: object
+      properties:
+        #### REQUIRED --> ####
+        url:
+          type: string
+          description: URL link to the level picture. Note that even though scale is not strictly required, it is recommended to prove it if url is given.
+          maxLength: 1024
+        #### <-- REQUIRED ####
+        #### OPTIONAL --> ####
+        scale:
+          type: string
+          description: Scale of this level, e.g. 1:100.
+          maxLength: 50
+        #### <-- OPTIONAL ####
+      required:
+        - url
+###################### <-- IMAGE ##################################
+###################### SENSOR --> #################################
+    Sensor:
+      type: object
+      properties:
+        #### REQUIRED --> ####
+        externalId:
+          type: string
+          description: External service id for the sensor.
+          maxLength: 256
+        serviceType:
+          type: string
+          enum: [fourdeg, ruuvi, ouman, porienergia, fmi]
+          description: Service identifier for this sensor.
+        x:
+          type: number
+          format: double
+          description: X location for this sensor on the associated level.
+        y:
+          type: number
+          format: double
+          description: Y location for this sensor on the associated level.
+        z:
+          type: number
+          format: double
+          description: Z location for this sensor on the associated level.
+        #### <-- REQUIRED ####
+        #### OPTIONAL --> ####
+        id:
+          type: integer
+          format: int64
+        description:
+          type: string
+          maxLength: 1024
+        name:
+          type: string
+          maxLength: 256
+        #### <-- OPTIONAL ####
+      required:
+        - externalId
+        - serviceType
+###################### <-- SENSOR #################################

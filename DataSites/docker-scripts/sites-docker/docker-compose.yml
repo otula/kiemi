@@ -1,0 +1,39 @@
+version: "3"
+services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: PASSWORD
+    volumes:
+      - databases:/var/lib/mysql
+      - ./databases-init.sql:/docker-entrypoint-initdb.d/databases-init.sql
+    expose:
+    - "3306"
+  kiemi-sites:
+    build:
+      dockerfile: Dockerfile
+      context:  ./kiemi-sites
+    ports:
+    - 44443:44443
+    restart: unless-stopped
+    depends_on:
+      - "db"
+  kiemi-sites-data:
+    build:
+      dockerfile: Dockerfile
+      context:  ./kiemi-sites-data
+    ports:
+    - 44441:44441
+    restart: unless-stopped
+    depends_on:
+      - "db"
+    volumes:
+      - files:/files
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      
+volumes:
+  files:
+  databases:
+  

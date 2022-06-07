@@ -1,0 +1,29 @@
+The basic influxdb 1.8.10 docker container.
+
+Startup with docker-compose (e.g. docker-compose up --build).
+
+The default setup starts influxdb with:
+- listening on HTTP port 44447
+- SSL disabled
+- no admin user
+- no databases
+
+init-db.sh script (curl required on host) found on the root directory can be executed to create the default database setup for KIEMI/DataSites:
+- admin user: USERNAME, password: PASSWORD (modify the script to use alternative credentials)
+- database: ruuvit
+- retention policies: autogen and 30min_mean_inf (30min average)
+
+
+To change the influxdb HTTP port, modify kiemi-influxdb/influxdb.conf file:
+- property "bind-address"
+
+To enable SSL, modify kiemi-influxdb/influxdb.conf file:
+- change property "https-enabled" to true
+- uncomment SSL certificate path, property "https-certificate" (.crt or .pem file)
+- optionally, uncommment private key path, property "https-private-key" (.key file)
+NOTE: The certificate directry in the container will always be /certificates/, but remember to rename the files, if you use a different file names than those defined in the configuration file example!
+- finally, copy your certificate files to kiemi-influxdb/certificates directory, they will be automatically copied to the container.
+
+
+WARNING! REMEMBER TO CREATE AN ADMIN USER. USE THE init.db.sh SCRIPT OR CREATE USER MANUALLY. IT IS VERY DANGEROUS TO RUN THE DATABASE WITHOUT ONE.
+

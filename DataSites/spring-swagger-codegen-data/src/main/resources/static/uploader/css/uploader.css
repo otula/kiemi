@@ -1,0 +1,9 @@
+#drop_zone {
+  border: 5px solid blue;
+  width:  200px;
+  height: 100px;
+}
+
+.image {
+	border: 2px solid blue;
+}

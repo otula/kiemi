@@ -1,0 +1,74 @@
+DataSites docker compose setup
+==============================
+
+A few basic steps are required to get the container up and running:
+
+1. Fetch the code available in the KIEMI GitHub repository (https://github.com/otula/kiemi)
+2. Modify the configuration for DataSites' required components, its Sites and Data services.
+3. Package these two services with `mvn package`. When packaging the jar files, make sure the configuration files are already up-to-date with docker configuration (see instructions below).
+4. Copy the created JAR files for sites and data services to the the root of the service directories under the docker-scripts directory:
+    - spring-swagger-codegen-sites-0.0.1-SNAPSHOT.jar in kiemi-sites directory
+    - spring-swagger-codegen-data-0.0.1-SNAPSHOT.jar kiemi-sites-data directory
+  If you use alternative file names, remember to update the Dockerfile(s) in kiemi-sites and/or kiemi-sites-data.
+
+
+----------------------------
+Configuration for Sites/Data
+----------------------------
+
+In sites, the spring-swagger-codegen-data/src/main/resources/application.properties should have the following settings:
+- server.port=44441
+- spring.jpa.hibernate.ddl-auto=update
+- spring.datasource.url=jdbc:mysql://db:3306/sites_data_service?serverTimezone=UTC
+- spring.datasource.username=USERNAME (this is defined in the db/databases-init.sh, if you prefer to change it)
+- spring.datasource.password=PASSWORD (this is defined in the db/databases-init.sh, if you prefer to change it)
+- sites.uri=http://kiemi-sites:44443
+- sites.username = USERNAME (this is defined in the db/databases-init.sh, if you prefer to change it)
+- sites.password = PASSWORD (this is defined in the db/databases-init.sh, if you prefer to change it)
+- files.directory = /files
+- Remember to change adapter-ruuvi.properties and adapter-aranet.properties properties if you use them! If you use the influxdb-docker container, the default values are uri=http://host.docker.internal:44447, username=USERNAME, password=PASSWORD, database=ruuvit, retentionpolicy=30min_mean_inf
+If you want to use SSL, also modify the required settings:
+- server.ssl.key-store: /certificates/keystore.p12 (directory is always /certificates/, change file name to match your certificate)
+- server.ssl.key-store-password: YOURKEYSTOREPASSWORD
+- server.ssl.key-store-type: PKCS12
+- server.ssl.key-alias: SSLCERTIFICATEALIAS
+- server.ssl.key-password: YOURKEYPASSWORD
+Also, remember to copy the certificate file (e.g. keystore.p12) to kiemi-sites-data/certificates
+
+
+----------------------------
+Configuration for Sites
+----------------------------
+
+In sites, the spring-swagger-codegen-sites/src/main/resources/application.properties should have the following settings:
+- server.port=44443
+- spring.jpa.hibernate.ddl-auto=update
+- spring.datasource.url=jdbc:mysql://db:3306/sites_data_service?serverTimezone=UTC
+- spring.datasource.username=USERNAME (this is defined in the db/databases-init.sh, if you prefer to change it)
+- spring.datasource.password=PASSWORD (this is defined in the db/databases-init.sh, if you prefer to change it)
+If you want to use SSL, also modify the required settings:
+- server.ssl.key-store: /certificates/keystore.p12 (directory is always /certificates/, change file name to match your certificate)
+- server.ssl.key-store-password: YOURKEYSTOREPASSWORD
+- server.ssl.key-store-type: PKCS12
+- server.ssl.key-alias: SSLCERTIFICATEALIAS
+- server.ssl.key-password: YOURKEYPASSWORD
+Also, remember to copy the certificate file (e.g. keystore.p12) to kiemi-sites/certificates
+
+NOTE: The sites WebUI assumes that the sites and data service are located on the same hostname (more specifically, the hostname returned by JavaScript's location.hostname) and that the data service is listening at port 44441. If this is NOT true on your setup, you must modify the server path in spring-swagger-codegen-sites/src/main/resources/static/js/config.js: property config.serverUrlData.
+
+------------------------------
+
+NOTE: even though it is technically possible to to use SSL only in sites OR in data, it is recommended to either use SSL in both, or not to use SSL at all (for testing only!), as using SSL only in the other one might cause issues with web browsers.
+
+-------
+Startup
+-------
+
+Startup with docker-compose (e.g. docker-compose up --build).
+
+The default configuration is essentially a blank plate with empty databases. MariaDB database has a single user USERNAME with password PASSWORD. The root password is defined in docker-compose.yml, and by default it is PASSWORD.
+
+You can use the create-user.sh script (or manually using create-user.sql) to add the default user (USERNAME/PASSWORD) to sites service. You can modify create-user.sql to add additional users. The password field in script (and in the database) must be bcrypt encrypted hash of the password. You can use, e.g. https://bcrypt.online to bcrypt strings.
+
+Note that by default, the MariaDB instance is not visible outside the docker network. You can change this behavior by modifying the expose-property in the docker-compose.yml (change to ports).
+

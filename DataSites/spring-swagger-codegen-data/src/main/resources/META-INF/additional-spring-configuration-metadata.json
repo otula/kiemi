@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "sites.password",
+    "type": "java.lang.String",
+    "description": "Password for sites service."
+  },
+  {
+    "name": "sites.username",
+    "type": "java.lang.String",
+    "description": "Username for sites service."
+  },
+  {
+    "name": "sites.uri",
+    "type": "java.lang.String",
+    "description": "URI to sites service. E.g. http://example.org:8080"
+  },
+  {
+    "name": "files.directory",
+    "type": "java.lang.String",
+    "description": "File system location for storing files."
+  }
+]}

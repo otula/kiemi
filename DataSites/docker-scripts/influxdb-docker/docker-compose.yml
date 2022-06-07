@@ -1,0 +1,14 @@
+version: "3"
+services:
+  kiemi-influxdb:
+    build:
+      dockerfile: Dockerfile
+      context:  ./kiemi-influxdb
+    ports:
+    - 44447:44447
+    restart: unless-stopped
+    volumes:
+      - database:/var/lib/influxdb
+      
+volumes:
+  database:

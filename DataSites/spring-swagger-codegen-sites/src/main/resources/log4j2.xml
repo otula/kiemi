@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Appenders>
+		<!-- Print to default console output -->
+		<Console name="Console" target="SYSTEM_OUT">
+			<!-- Print date as ISO8601, include the called (method) information. Use the version without method name for better performance -->
+			<PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger{36} - method: %M - %msg%n" />
+			<!-- Print date as ISO8601, omit the method name -->
+			<!-- <PatternLayout pattern="%d{ISO8601} [%t] %-5level %logger{36} - %msg%n"/> -->
+		</Console>
+	</Appenders>
+	<Loggers>
+		<!-- Print everything ranked debug or higher -->
+		<Root level="debug">
+			<AppenderRef ref="Console" />
+		</Root>
+		<!-- Filter out spring's output -->
+		<Logger name="org.springframework" level="warn">
+			<AppenderRef ref="Console"/>
+		</Logger>
+	</Loggers>
+</Configuration>

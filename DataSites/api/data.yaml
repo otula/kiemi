@@ -1,0 +1,250 @@
+#
+# Copyright 2021 Tampere University
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+openapi: 3.0.0
+info:
+  description: Data API
+  version: 1.0.0
+  title: Data Web API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+tags:
+  - name: data
+    description: Manage raw data.
+  - name: files
+    descriotion: Manage files.
+paths:
+###################### DATA API --> ###################################
+  "/data/sensors/{sensorId}":
+########### GET /data/SENSOR_ID --> ###########
+    get:
+      tags:
+        - data
+      security:
+        - BasicAuth: []
+      summary: Return data.
+      operationId: getData
+      parameters:
+        - name: sensorId
+          in: path
+          description: Retrieve the sensor, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: from
+          in: query
+          required: false
+          example: 1970-01-01T00:00:00Z
+          description: Select data since the given value (inclusive), in ISO8601 format.
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          required: false
+          example: 3000-12-31T23:59:59Z
+          description: Select data until the given value (inclusive), in ISO8601 format.
+          schema:
+            type: string
+            format: date-time
+        - name: params
+          in: query
+          required: false
+          example: params=PARAMETER1=VALUE1,PARAMETER2=VALUE2
+          description: List of parameters for back-end adapter, separated by comma.
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+#                  $ref: "#/components/schemas/Data"
+########### <-- GET /data/SENSOR_ID ###########
+###################### <-- DATA API ###################################
+###################### FILES API --> ###################################
+  "/files":
+########### GET /files --> ###########
+    get:
+      tags:
+        - files
+      security:
+        - BasicAuth: []
+      summary: Return list of file details.
+      operationId: getFiles
+      parameters:
+        - name: max_results
+          in: query
+          description: Return specified maximum number of results (>=1).
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: start_page
+          in: query
+          description: Start listing from the given page (>=0).
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FileDetail"
+########### <-- GET /files ###########
+########### POST /files --> ###########
+    post:
+      tags:
+        - files
+      security:
+        - BasicAuth: []
+      summary: Upload a new file.
+      operationId: postFile
+      requestBody:
+        description: The file as an HTTP body.
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FileDetail"
+########### <-- POST /files ###########
+  "/files/{fileId}":
+########### GET /files/FILE_ID --> ###########
+    get:
+      tags:
+        - files
+      security:
+        - BasicAuth: []
+      summary: Download a file.
+      operationId: getFile
+      parameters:
+        - name: fileId
+          in: path
+          description: Download file, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation.
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+########### <-- GET /files/FILE_ID ###########
+########### PUT /files/FILE_ID --> ###########
+    put:
+      tags:
+        - files
+      security:
+        - BasicAuth: []
+      summary: Replace existing file.
+      operationId: putFile
+      parameters:
+        - name: fileId
+          in: path
+          description: Replace file, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: The file as an HTTP body.
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FileDetail"
+########### <-- PUT /files/FILE_ID ###########
+########### DELETE /files/FILE_ID --> ###########
+    delete:
+      tags:
+        - files
+      security:
+        - BasicAuth: []
+      summary: Delete file.
+      operationId: deleteFile
+      parameters:
+        - name: fileId
+          in: path
+          description: Delete file, which has the given id.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Successful operation.
+########### <-- DELETE /files/FILE_ID ###########
+###################### <-- FILES API ###################################
+servers:
+  - url: http://localhost/data
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+###################### FILEDETAIL --> ##################################
+    FileDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        timestamp:
+          type: string
+          format: date-time
+          description: File timestamp.
+      required:
+        - id
+        - timestamp
+###################### <-- FILEDETAIL ##################################

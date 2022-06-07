@@ -17,6 +17,10 @@ csv-json-xy-graphs
 - Example files from csv-json-graphs work with csv-json-xy-graphs, just remember to change the temperature,humidity field names to match the fields you want to plot, and change the csv separator (, or ;)
 
 
+DataSites
+- DataSites Proof-of-Concept platform for retrieving and visualizing sensor data.
+
+
 DS18x20-uart-opencpu
  - DS18x20 1-wire over uart implementation for Quectel bc66/OpenCPU.
 
