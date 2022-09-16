@@ -341,10 +341,6 @@ var floorplan = {
   updateLinkBar: function(externalUrl, latitude, longitude) {
     var linkbar = $('#linkbar');
     linkbar.empty();
-    // The datetime start - datetime end selection button is always shown.
-    // if(!externalUrl && (!latitude || !longitude)){
-    //   return;
-    // }
 
     linkbar.append('<img id="dateTimeSelectionImg" alt="dateTimeSelection" src="/img/calendar.svg" height="20" role="button" tabIndex=666 >');
 
@@ -354,11 +350,14 @@ var floorplan = {
       ui.openPopup(getText('dateTimeSelectionPopupHeader'), ui.createFormContent(form), [{
           preset: 'ok',
           action: function() {
+						let offset = (new Date()).getTimezoneOffset()*-60000;
             if (document.getElementById("Start date").value !== "") {
-              config.sensorDataRange.from = new Date(document.getElementById("Start date").value);
+							let from = new Date(document.getElementById("Start date").value);
+              config.sensorDataRange.from = new Date(from.getTime()-offset);
             }
             if (document.getElementById("End date").value) {
-              config.sensorDataRange.to = new Date(document.getElementById("End date").value);
+							let to = new Date(document.getElementById("End date").value);
+              config.sensorDataRange.to = new Date(to.getTime()+config.dataTimeSelectorToOffset-offset);
             }
           }
         },

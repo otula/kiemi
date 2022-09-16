@@ -29,6 +29,7 @@ var config = {
   defaultSiteId : null, // id of default site id
   defaultLayerId : null, // id of default layer id
   defaultSensorId : null, // array[] of default sensor identifiers
+	dataTimeSelectorToOffset : 86399999, // date time selector end time (to) offset, in ms
   sensorData: {
     defaultRoundingDigits : 2,
     position: {},
