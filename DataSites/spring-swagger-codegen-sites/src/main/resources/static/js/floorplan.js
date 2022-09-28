@@ -18,8 +18,8 @@ var floorplan = {
     this._mode = '';
     this._zoomLevel = 1;
     this._data = { sites: {}, layers: {}, sensors: {}, siteLayers: {}, layerLayers: {}, layerSensors: {}, sensorData: {} };
-    this._currentSiteId;
-    this._currentLayerId;
+    this._currentSiteId = null;
+    this._currentLayerId = null;
     this.sensorStoppedOnUnpositioned = false;
     this.processUrlParameters();
 
@@ -350,13 +350,13 @@ var floorplan = {
       ui.openPopup(getText('dateTimeSelectionPopupHeader'), ui.createFormContent(form), [{
           preset: 'ok',
           action: function() {
-						let offset = (new Date()).getTimezoneOffset()*-60000;
+            let offset = (new Date()).getTimezoneOffset()*-60000;
             if (document.getElementById("Start date").value !== "") {
-							let from = new Date(document.getElementById("Start date").value);
+              let from = new Date(document.getElementById("Start date").value);
               config.sensorDataRange.from = new Date(from.getTime()-offset);
             }
             if (document.getElementById("End date").value) {
-							let to = new Date(document.getElementById("End date").value);
+              let to = new Date(document.getElementById("End date").value);
               config.sensorDataRange.to = new Date(to.getTime()+config.dataTimeSelectorToOffset-offset);
             }
           }
@@ -370,7 +370,7 @@ var floorplan = {
     if (externalUrl) {
       linkbar.append('<a href="' + externalUrl + '" target="_blank"><img alt="externalUrl" src="/img/link-45deg.svg" height="20"></a>');
     }
-    if (latitude && longitude) {
+    if (latitude != null && longitude != null) {
       linkbar.append('<a href="' + config.mapUrl + config.mapParamLatitude + latitude + config.mapParamLongitude + longitude + '" target="_blank"><img alt="mapUrl" src="/img/geo-alt-fill.svg" height="20"></a>');
     }
     linkbar.removeClass("hidden");
@@ -922,6 +922,8 @@ var floorplan = {
 
       let temperature = null;
       let humidity = null;
+      let latitude = null;
+      let longitude = null;
       dataList.forEach((property) => {
         var sensorDataObject = this.getSensorDataObject(property, sensor.serviceType);
         var activeAlert = _this.getActiveAlert(sensorId, sensorDataObject);
@@ -937,6 +939,12 @@ var floorplan = {
           temperature = value;
         } else if (property == 'humidity') {
           humidity = value;
+        } else if (property == 'latitude') {
+          latitude = value;
+          return;
+        } else if (property == 'longitude') {
+          longitude = value;
+          return;
         }
         if (_.isUndefined(value) || _.isNull(value)) {
           value = '-';
@@ -957,10 +965,11 @@ var floorplan = {
         }
         html += '</tr>';
       });
-      if (temperature != null && humidity != null && config.thermalComfort.limits.length > 0) { //TODO put something as value? is the current value in the "zone"?
-        html += '<tr><td></td><td>Thermal comfort: </td><td>';
+
+      if (temperature != null && humidity != null && config.thermalComfort.limits.length > 0) {
+        html += '<tr><td></td><td>'+getText('thermalComfort')+': </td><td>';
         for (let limit of config.thermalComfort.limits) {
-          if (xyutils.inside([temperature, humidity], limit.polygon)) {
+          if (utilFunctions.inside([temperature, humidity], limit.polygon)) {
             html += '<span style="color:' + limit.color + '">' + config.thermalComfort.insideText + '</span>';
           } else {
             html += '<span style="color:' + limit.color + '">' + config.thermalComfort.outsideText + '</span>';
@@ -968,6 +977,14 @@ var floorplan = {
         }
         html += '</td><td><div class="sensorViewGraph basicButton" dataid="thermalComfort"></div></td></tr>';
       }
+
+      let currentLayer = floorplan._data.layers[floorplan._currentLayerId];
+      if (latitude != null && longitude != null && currentLayer && typeof currentLayer.latitude !== 'undefined' && typeof currentLayer.longitude !== 'undefined') {
+        html += '<tr><td></td><td>'+getText('distance')+': </td><td>';
+        html += '<span>' + utilFunctions.calculateDistance(currentLayer.latitude, currentLayer.longitude, latitude, longitude).toFixed(config.sensorData.defaultRoundingDigits) + ' km</span>';
+        html += '</td><td><a href="' + config.mapUrl + config.mapParamLatitude + latitude + config.mapParamLongitude + longitude + '" target="_blank"><img alt="mapUrl" src="/img/geo-alt-fill.svg" height="20"></a></td></tr>';
+      }
+
       html += '</table></div>';
 
       ui.openPopup(getText('viewSensor', { sensor: (sensor.name || sensor.externalId) }), html, [{
@@ -1330,7 +1347,7 @@ var floorplan = {
         } else {
           let outCount = 0;
           for (let d of chartData) {
-            if (!xyutils.inside([d.x, d.y], limit.polygon)) {
+            if (!utilFunctions.inside([d.x, d.y], limit.polygon)) {
               ++outCount;
             }
           }

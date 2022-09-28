@@ -180,11 +180,17 @@ public class DataCombiner {
 		LinkedList<IlmatieteenlaitosData> ild = new LinkedList<>();
 		
 		for(Entry<Point, ListOrderedMap<Date, HashMap<String, Object>>> ep : _data.entrySet()) {
-			String place = ep.getKey().getName();
+			Point point = ep.getKey();
+			String place = point.getName();
+			Position position = point.getPosition();
+			Double latitude = position.getLatitude();
+			Double longitude = position.getLongitude();
 			for(Entry<Date, HashMap<String, Object>> ed : ep.getValue().entrySet()) {
 				IlmatieteenlaitosData d = new IlmatieteenlaitosData();
 				d.setPlace(place);
 				d.setTime(ed.getKey());
+				d.setLatitude(latitude);
+				d.setLongitude(longitude);
 				boolean dataAdded = false;
 				for(Entry<String, Object> ek : ed.getValue().entrySet()) {
 					String key = ek.getKey();

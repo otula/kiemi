@@ -29,7 +29,7 @@ var config = {
   defaultSiteId : null, // id of default site id
   defaultLayerId : null, // id of default layer id
   defaultSensorId : null, // array[] of default sensor identifiers
-	dataTimeSelectorToOffset : 86399999, // date time selector end time (to) offset, in ms
+  dataTimeSelectorToOffset : 86399999, // date time selector end time (to) offset, in ms
   sensorData: {
     defaultRoundingDigits : 2,
     position: {},
@@ -37,7 +37,7 @@ var config = {
     id: { roundingDigits: 0 },
     name: {},
     externalId: {},
-		place: {dataId: 'place'},
+	place: {dataId: 'place'},
     temperature: { dataId: { default: 'temperature', fourdeg: 'current_temperature' }, unit: '°C', alerts: [{ alert: 'green', min: 20, max: 22 }, { alert: 'yellow', min: 19, max: 24 }, { alert: 'red' }], scaleDefaults: { min: 0, max: 30}, roundingDigits: 2 },
     setTemperature: { dataId: 'current_set_point', unit: '°C' },
     communication: { dataId: { default: 'time', fourdeg: 'last_communication' } },
@@ -46,12 +46,14 @@ var config = {
     battery: { dataId: 'current_battery_remaining', unit: '%', alerts: [{ alert: 'green', min: 60 }, { alert: 'yellow', min: 30 }, { alert: 'red' }] },
     pressure: { dataId: 'pressure', unit: 'hPa', scaleDefaults: { min: 900, max: 1100}, roundingDigits: 0 },
     humidity: { dataId: 'humidity', unit: 'RH%', scaleDefaults: { min: 0, max: 100}, roundingDigits: 0 },
-		cloudCover: { dataId: 'cloudCover', unit: '/8', scaleDefaults: { min: 0, max: 8}, roundingDigits: 0 },
-		rainIntensity: { dataId: 'rainIntensity', unit: 'mm/h?', roundingDigits: 1 },
-		windDirection: { dataId: 'windDirection', unit: '°', roundingDigits: 0 },
-		windSpeed: { dataId: 'windSpeed', unit: 'm/s', roundingDigits: 0 },
-		rain: { dataId: 'rain', unit: 'mm/h?', roundingDigits: 1 },
+    cloudCover: { dataId: 'cloudCover', unit: '/8', scaleDefaults: { min: 0, max: 8}, roundingDigits: 0 },
+	rainIntensity: { dataId: 'rainIntensity', unit: 'mm/h?', roundingDigits: 1 },
+	windDirection: { dataId: 'windDirection', unit: '°', roundingDigits: 0 },
+	windSpeed: { dataId: 'windSpeed', unit: 'm/s', roundingDigits: 0 },
+	rain: { dataId: 'rain', unit: 'mm/h?', roundingDigits: 1 },
     mac: { dataId: 'mac' },
+    latitude: { dataId: 'latitude' },
+    longitude: { dataId: 'longitude' },
     co2: { dataId: { default: 'co2', ouman: 'sensor-air-room-co2', aranet: 'co2' }, unit: 'ppm', scaleDefaults: { min: 400, max: 1200}, roundingDigits: 0 },
     voc: { dataId: { default: 'voc', ouman: 'sensor-air-room-voc' }, unit: 'ppb', scaleDefaults: { min: 0, max: 1000}, roundingDigits: 0 }
   },
@@ -59,17 +61,17 @@ var config = {
     default: ['position', 'temperature', 'humidity', 'communication', 'id', 'name'],
     fourdeg: ['position', 'alert', 'id', 'name', 'externalId', 'temperature', 'setTemperature', 'valve', 'signal', 'battery', 'communication'],
     ouman: ['position', 'co2', 'voc', 'communication','id', 'name'],
-		porienergia: ['position', 'temperature', 'humidity', 'communication','id', 'name'],
-		fmi: ['position', 'cloudCover', 'temperature', 'humidity', 'communication','id', 'name', 'place','pressure','rainIntensity','windDirection','windSpeed'],
+	porienergia: ['position', 'temperature', 'humidity', 'communication','id', 'name'],
+	fmi: ['position', 'cloudCover', 'temperature', 'humidity', 'communication','id', 'name', 'place','pressure','rainIntensity','windDirection','windSpeed'],
     ruuvi: ['position', 'temperature', 'pressure', 'humidity', 'communication', 'alert', 'id', 'name', 'externalId', 'mac'],
-		aranet: ['position', 'temperature', 'pressure', 'humidity', 'communication', 'co2', 'id', 'name', 'externalId']
+	aranet: ['position', 'temperature', 'pressure', 'humidity', 'communication', 'co2', 'id', 'name', 'externalId']
   },
   sensorViewData: {
     default: ['temperature', 'humidity', 'communication'],
     fourdeg: ['temperature', 'setTemperature', 'valve', 'signal', 'battery', 'communication'],
     ouman: ['co2', 'voc', 'communication'],
-		porienergia: ['temperature', 'humidity', 'communication'],
-		fmi: ['cloudCover', 'temperature', 'humidity', 'communication', 'place','pressure','rainIntensity','windDirection','windSpeed'],
+	porienergia: ['temperature', 'humidity', 'communication'],
+	fmi: ['cloudCover', 'temperature', 'humidity', 'communication', 'place','pressure','rainIntensity','windDirection','windSpeed','latitude','longitude'],
     ruuvi: ['mac','temperature', 'pressure', 'humidity', 'communication'],
     aranet: ['temperature', 'pressure', 'humidity', 'co2', 'communication']
   },
@@ -77,8 +79,8 @@ var config = {
     default: ['temperature', 'humidity', 'communication'],
     fourdeg: ['temperature', 'setTemperature', 'valve', 'signal', 'battery', 'communication'],
     ouman: ['co2', 'voc', 'communication'],
-		porienergia: ['temperature', 'humidity', 'communication'],
-		fmi: ['cloudCover', 'temperature', 'humidity', 'communication', 'place','pressure','rainIntensity','windDirection','windSpeed'],
+    porienergia: ['temperature', 'humidity', 'communication'],
+	fmi: ['cloudCover', 'temperature', 'humidity', 'communication', 'place','pressure','rainIntensity','windDirection','windSpeed'],
     ruuvi: ['temperature', 'pressure', 'humidity', 'communication', 'mac'],
     aranet: ['temperature', 'pressure', 'humidity', 'co2', 'communication']
   },

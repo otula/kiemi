@@ -24,6 +24,10 @@ public final class Definitions {
 	/** JSON property name */
 	public static final String JSON_PROPERTY_CLOUD_COVER = "cloudCover";
 	/** JSON property name */
+	public static final String JSON_PROPERTY_LATITUDE = "latitude";
+	/** JSON property name */
+	public static final String JSON_PROPERTY_LONGITUDE = "longitude";
+	/** JSON property name */
 	public static final String JSON_PROPERTY_PRESSURE_SEA_LEVEL = "pressure";
 	/** JSON property name */
 	public static final String JSON_PROPERTY_RAIN = "rain";

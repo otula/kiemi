@@ -367,10 +367,12 @@ var ui = {
       var format = inputField.getAttribute('format') || '';
       var group = inputField.getAttribute('group') || '';
 
-      switch (format.toLowerCase()) {
-        case 'number':
-          value = Number(value);
-          break;
+      if(value.length > 0){
+        switch (format.toLowerCase()) {
+          case 'number':
+            value = Number(value);
+            break;
+        }
       }
       if (group) {
         if (!_.has(values, group)) values[group] = {};

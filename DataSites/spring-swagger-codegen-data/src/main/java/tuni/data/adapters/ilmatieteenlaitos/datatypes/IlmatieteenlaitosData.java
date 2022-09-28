@@ -35,6 +35,10 @@ public class IlmatieteenlaitosData implements tuni.data.adapters.datatypes.Data 
 	private Double _cloudCover = null;
 	@JsonProperty(Definitions.JSON_PROPERTY_HUMIDITY)
 	private Double _humidity = null;
+	@JsonProperty(Definitions.JSON_PROPERTY_LATITUDE)
+	private Double _latitude = null;
+	@JsonProperty(Definitions.JSON_PROPERTY_LONGITUDE)
+	private Double _longitude = null;
 	@JsonProperty(Definitions.JSON_PROPERTY_PLACE)
 	private String _place = null;
 	@JsonProperty(Definitions.JSON_PROPERTY_PRESSURE_SEA_LEVEL)
@@ -205,5 +209,35 @@ public class IlmatieteenlaitosData implements tuni.data.adapters.datatypes.Data 
 	 */
 	public void setPlace(String place) {
 		_place = place;
+	}
+
+	/**
+	 * @return the latitude
+	 */
+	@JsonIgnore
+	public Double getLatitude() {
+		return _latitude;
+	}
+
+	/**
+	 * @param latitude the latitude to set
+	 */
+	public void setLatitude(Double latitude) {
+		_latitude = latitude;
+	}
+
+	/**
+	 * @return the longitude
+	 */
+	@JsonIgnore
+	public Double getLongitude() {
+		return _longitude;
+	}
+
+	/**
+	 * @param longitude the longitude to set
+	 */
+	public void setLongitude(Double longitude) {
+		_longitude = longitude;
 	}
 }

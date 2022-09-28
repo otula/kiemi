@@ -62,6 +62,7 @@
     "co2": "CO2",
     "voc": "VOC",
     "thermalComfort": "Mukavuuslämpö",
+    "distance": "Etäisyys",
 
     "legendHeader": "Sensorien mittaukset",
 
@@ -133,6 +134,7 @@
     "co2": "CO2",
     "voc": "VOC",
     "thermalComfort": "Thermal Comfort",
+    "distance": "Distance",
 
     "legendHeader": "Sensors' measurements",
 
