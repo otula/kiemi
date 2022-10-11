@@ -61,8 +61,14 @@ public class AranetAdapter implements Adapter, InitializingBean, DisposableBean 
 		String eId = sensor.getExternalId();
 		String database = null;
 		String measurement = null;
-		String[] parts = StringUtils.split(eId, SEPARATOR_PATH);
-		if(parts.length == 3) {
+		String policy = null;
+		String[] parts = StringUtils.split(eId, SEPARATOR_PATH); // external id is either TAG, DATABASE/MEASUREMENT/TAG or DATABASE/MEASUREMENT/TAG/POLICY
+		if(parts.length == 4) {
+			database = parts[0];
+			measurement = parts[1];
+			eId = parts[2];
+			policy = parts[3];
+		}else if(parts.length == 3) {
 			database = parts[0];
 			measurement = parts[1];
 			eId = parts[2];
@@ -73,8 +79,15 @@ public class AranetAdapter implements Adapter, InitializingBean, DisposableBean 
 		}else {
 			throw new InvalidParameterException("Invalid external identifier: "+eId);
 		}
-		String policy = null;
-		if(params != null && (policy = params.get(tuni.data.adapters.influxdb.ruuvi.Definitions.PARAMETER_RETENTION_POLICY)) != null) {
+		
+		if(params != null) { // parameters will override all previously configured values
+			String p = (policy = params.get(Definitions.PARAMETER_RETENTION_POLICY));
+			if(p != null) {
+				policy = p;
+			}
+		}
+		
+		if(policy != null) {
 			return _aClient.getData(database, measurement, eId, from, to, policy);
 		}else {
 			return _aClient.getData(database, measurement, eId, from, to);

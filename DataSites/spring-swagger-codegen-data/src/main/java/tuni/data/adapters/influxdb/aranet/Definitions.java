@@ -42,6 +42,10 @@ public final class Definitions {
 	
 	/** JSON prefix for mean values */
 	public static final String JSON_PREFIX_MEAN = "mean_";
+	
+	/* parameters */
+	/** parameter retention policy */
+	public static final String PARAMETER_RETENTION_POLICY = tuni.data.adapters.influxdb.ruuvi.Definitions.PARAMETER_RETENTION_POLICY;
 
 	/**
 	 * 
