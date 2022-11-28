@@ -41,6 +41,8 @@ NB-IoT-Temperature-Prototype
 osku
 - Spring Boot App (service) for collecting feedback about living and working conditions in buildings
 
+Note: the source codes in this repository are provided "as is". The applications/components were created as part of [the KIEMI project](https://www.avoinsatakunta.fi/kiemi/). The project has ended in December 2022, and thus, the source will not receive any further updates. If you want to use the codes, check out the issues-section for any known problems.
+
 License
 -------
 
